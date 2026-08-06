@@ -4,10 +4,12 @@ import Setup from "./components/Setup";
 import MatrixUI from "./components/MatrixUI";
 import RadioUI from "./components/RadioUI";
 import Results from "./components/Results";
+import MatrixTour from "./components/MatrixTour";
+import RadioTour from "./components/RadioTour";
 import ThemeToggle from "./components/ThemeToggle";
 import { UIType, UserInfo } from "./types";
 
-type Step = "login" | "setup" | "matrix" | "radio" | "results";
+type Step = "login" | "setup" | "matrix" | "radio" | "results" | "matrixtour" | "radiotour";
 
 interface FinalResult {
   weights: number[];
@@ -26,10 +28,10 @@ export default function App() {
     setStep("setup");
   }
 
-  function handleStart(type: UIType, crit: string[]) {
+  function handleStart(typ: UIType, crit: string[]) {
     setCriteria(crit);
     setStartTime(Date.now()); // timer zero-point — never rendered during input, only used when logging events
-    setStep(type);
+    setStep(typ);
   }
 
   function handleFinish(weights: number[], cr: number, ui: UIType) {
@@ -42,10 +44,29 @@ export default function App() {
     setResult(null);
     setStep("login");
   }
+  function handleTourMatrix() {
+    setStep("matrix");
+  }
 
-  const stepIndex = { login: 1, setup: 1, matrix: 2, radio: 2, results: 3 }[
-    step
-  ];
+  function goBack() {
+    setStep("setup");
+  }
+  
+  function goForthRadioTour(){
+    setStep('radio')
+  }
+  function goBackFromRadioTour(){
+    setStep('matrix')
+  }
+  const stepIndex = {
+    login: 1,
+    setup: 2,
+    matrixtour: 3,
+    matrix: 4,
+    radiotour: 5,
+    radio: 6,
+    results: 7,
+  }[step];
 
   return (
     <div className="console">
@@ -56,13 +77,25 @@ export default function App() {
         </div>
         <div className="stepper">
           <span className={`step ${stepIndex === 1 ? "current" : ""}`}>
-            01 Setup
+            01 Login
           </span>
           <span className={`step ${stepIndex === 2 ? "current" : ""}`}>
-            02 Compare
+            02 SetUp
           </span>
           <span className={`step ${stepIndex === 3 ? "current" : ""}`}>
-            03 Result
+            03 Matrix Tour
+          </span>
+          <span className={`step ${stepIndex === 4 ? "current" : ""}`}>
+            04 Matirx Compare
+          </span>
+          <span className={`step ${stepIndex === 5 ? "current" : ""}`}>
+            05 Radio Tour
+          </span>
+          <span className={`step ${stepIndex === 6 ? "current" : ""}`}>
+            06 Radio Compare
+          </span>
+          <span className={`step ${stepIndex === 7 ? "current" : ""}`}>
+            07 Finish
           </span>
         </div>
         <ThemeToggle />
@@ -72,6 +105,13 @@ export default function App() {
 
       {step === "setup" && <Setup onStart={handleStart} />}
 
+      {step === "matrixtour" && (
+        <MatrixTour goBack={goBack} onStart={handleTourMatrix} />
+      )}
+
+      {step === "radiotour" && (
+        <RadioTour goBack={goBackFromRadioTour} goForth={goForthRadioTour} />
+      )}
       {step === "matrix" && user && (
         <MatrixUI
           criteria={criteria}

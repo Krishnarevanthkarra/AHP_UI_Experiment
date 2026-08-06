@@ -131,11 +131,12 @@ export default function MatrixUI({
                     return (
                       <td key={j}>
                         <select
-                          value={upper[i][j]}
+                          defaultValue=""
                           onChange={(e) =>
                             handleCellChange(i, j, parseFloat(e.target.value))
                           }
-                        >
+                        required>
+                          <option value="" disabled>Select</option>
                           {SCALE.map((opt) => (
                             <option key={opt.label} value={opt.value}>
                               {opt.label}
@@ -168,14 +169,14 @@ export default function MatrixUI({
         </button>
         <button
           className="btn-ghost"
-          onClick={() => onFinish(weights, CR, "setup")}
+          onClick={() => onFinish(weights, CR, "matrixtour")}
         >
           ⬅ Back
         </button>
         <button
           className="btn-primary"
           disabled={CR >= 0.1}
-          onClick={() => onFinish(weights, CR, "radio")}
+          onClick={() => onFinish(weights, CR, "radiotour")}
         >
           Next
         </button>

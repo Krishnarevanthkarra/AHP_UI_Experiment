@@ -221,7 +221,7 @@ export default function RadioUI({
         </button>
         <button
           className="btn-ghost"
-          onClick={() => onFinish(weights, CR, "matrix")}
+          onClick={() => onFinish(weights, CR, "radiotour")}
         >
           ⬅ Back
         </button>

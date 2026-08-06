@@ -135,6 +135,17 @@ h1 {
   gap: 16px;
   max-width: 420px;
 }
+.both {
+  display: flex; /* put children side by side */
+  gap: 24px; /* clean space between them */
+  align-items: flex-start; /* align at the top */
+}
+
+.both > div {
+  flex: 1; /* make both divs equal width */
+  min-width: 0; /* prevent overflow issues */
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -167,6 +178,11 @@ h1 {
   color: var(--bad);
   font-size: 13px;
   margin: 0;
+}
+.terms-actions {
+  display: flex;
+  justify-content: flex-end; /* push button to the right */
+  margin-top: 16px; /* add spacing above */
 }
 
 /* --- Setup --- */
@@ -515,4 +531,45 @@ table select {
   .result-bar-row {
     grid-template-columns: 100px 1fr 50px;
   }
+}
+
+/* Matrix Tour */
+.tour-panel {
+  max-width: 900px;
+  margin: auto;
+}
+
+.video-wrapper {
+  margin: 24px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+.video-wrapper img {
+  display: block; /* removes inline gaps */
+  width: 100%; /* scales image to wrapper width */
+  height: auto; /* keeps aspect ratio */
+  object-fit: cover; /* ensures it fills nicely */
+}
+
+.tour-info {
+  margin-top: 24px;
+}
+
+.tour-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+}
+
+.tour-table th,
+.tour-table td {
+  border: 1px solid var(--line);
+  padding: 12px;
+  text-align: left;
+}
+
+.tour-table th {
+  background: var(--surface-raised);
 }

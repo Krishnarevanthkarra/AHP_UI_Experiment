@@ -36,8 +36,8 @@ export default function Setup({ onStart }: Props) {
   }
 
   function handleStart() {
-    const finalNames = names.map((n, i) => n.trim() || `Criterion ${i + 1}`);
-    onStart(uiType, finalNames);
+    const finalNames: string[] = names.map((n, i) => n.trim() || `Criterion ${i + 1}`);
+    onStart("matrixtour", finalNames);
   }
   function handleBack() {
     const finalNames = names.map((n, i) => n.trim() || `Criterion ${i + 1}`);

@@ -1,4 +1,11 @@
-export type UIType = "matrix" | "radio" | "login" | "results" | "setup";
+export type UIType =
+  | "matrix"
+  | "radio"
+  | "login"
+  | "results"
+  | "setup"
+  | "matrixtour"
+  | "radiotour";
 
 export interface UserInfo {
   name: string;
