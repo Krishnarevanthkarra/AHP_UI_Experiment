@@ -26,6 +26,8 @@ client = MongoClient(MONGO_URL)
 db = client[DB_NAME]
 matrix_responses = db["matrix_responses"]
 radio_responses = db["radio_responses"]
+matrix_survey = db['matrix_survey']
+radio_survey = db['radio_survey']
 
 # Flat, minimal, CSV-friendly schema — same field set for both collections,
 # just interpreted per UI. No nested objects, so `mongoexport --type=csv`
@@ -56,6 +58,20 @@ class RadioEvent(BaseModel):
     value: str                # the radio option chosen, as text
     option_vote_count: int
 
+class MatrixSurvey(BaseModel):
+    name: str = Field(..., min_length=1)
+    rollno: str = Field(..., min_length=1)
+    age: int = Field(..., gt=0, lt=130)
+    mental: int
+    physical: int
+    temporal: int
+    performance: int
+    effort: int
+    frustation: int
+
+class RadioSurvey(MatrixSurvey):
+    ...
+
 
 @app.post("/api/matrix/event")
 def log_matrix_event(payload: MatrixEvent):
@@ -68,6 +84,15 @@ def log_radio_event(payload: RadioEvent):
     radio_responses.insert_one(payload.model_dump())
     return {"ok": True}
 
+@app.post("/api/matrix_survey")
+def log_matrix_survey(payload: MatrixSurvey):
+    matrix_survey.insert_one(payload.model_dump())
+    return {'ok': True}
+
+@app.post("/api/radio_survey")
+def log_radio_survey(payload: RadioSurvey):
+    radio_survey.insert_one(payload.model_dump())
+    return {'ok': True}
 
 def stream_csv(collection, filename: str) -> StreamingResponse:
     def generate():

@@ -5,7 +5,9 @@ export type UIType =
   | "results"
   | "setup"
   | "matrixtour"
-  | "radiotour";
+  | "radiotour"
+  | "matrixquestionnaire"
+  | "radioquestionnaire";
 
 export interface UserInfo {
   name: string;
@@ -29,4 +31,23 @@ export interface RadioEventPayload extends UserInfo {
   option: string;
   value: string;
   option_vote_count: number;
+}
+
+export interface MatrixQuestionnairePayload {
+  mental: number;
+  physical: number;
+  temporal: number;
+  performance: number;
+  effort: number;
+  frustation: number;
+  // get(key: string): number;
+}
+
+export interface RadioQuestionnairePayload {
+  mental: number;
+  physical: number;
+  temporal: number;
+  performance: number;
+  effort: number;
+  frustation: number;
 }

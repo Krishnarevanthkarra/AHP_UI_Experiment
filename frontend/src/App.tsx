@@ -6,10 +6,19 @@ import RadioUI from "./components/RadioUI";
 import Results from "./components/Results";
 import MatrixTour from "./components/MatrixTour";
 import RadioTour from "./components/RadioTour";
+import MatrixQuestionnaire from "./components/MatrixQuestionnaire";
 import ThemeToggle from "./components/ThemeToggle";
 import { UIType, UserInfo } from "./types";
 
-type Step = "login" | "setup" | "matrix" | "radio" | "results" | "matrixtour" | "radiotour";
+type Step =
+  | "login"
+  | "setup"
+  | "matrix"
+  | "radio"
+  | "results"
+  | "matrixtour"
+  | "radiotour"
+  | "matrixquestionnaire";
 
 interface FinalResult {
   weights: number[];
@@ -51,21 +60,29 @@ export default function App() {
   function goBack() {
     setStep("setup");
   }
-  
-  function goForthRadioTour(){
-    setStep('radio')
+
+  function goForthRadioTour() {
+    setStep("radio");
   }
-  function goBackFromRadioTour(){
-    setStep('matrix')
+  function goBackFromRadioTour() {
+    setStep("matrixquestionnaire");
+  }
+
+  function goBackMatrixQuestionnaire() {
+    setStep("matrix");
+  }
+  function goForthMatrixQuestinnaire() {
+    setStep("radiotour");
   }
   const stepIndex = {
     login: 1,
     setup: 2,
     matrixtour: 3,
     matrix: 4,
-    radiotour: 5,
-    radio: 6,
-    results: 7,
+    matrixquestionnaire: 5,
+    radiotour: 6,
+    radio: 7,
+    results: 8,
   }[step];
 
   return (
@@ -89,13 +106,16 @@ export default function App() {
             04 Matirx Compare
           </span>
           <span className={`step ${stepIndex === 5 ? "current" : ""}`}>
-            05 Radio Tour
+            05 Matrix Questionnaire
           </span>
           <span className={`step ${stepIndex === 6 ? "current" : ""}`}>
-            06 Radio Compare
+            06 Radio Tour
           </span>
           <span className={`step ${stepIndex === 7 ? "current" : ""}`}>
-            07 Finish
+            07 Radio Compare
+          </span>
+          <span className={`step ${stepIndex === 8 ? "current" : ""}`}>
+            08 Finish
           </span>
         </div>
         <ThemeToggle />
@@ -112,6 +132,14 @@ export default function App() {
       {step === "radiotour" && (
         <RadioTour goBack={goBackFromRadioTour} goForth={goForthRadioTour} />
       )}
+      {step === "matrixquestionnaire" && (
+        <MatrixQuestionnaire
+          user={user}
+          goBack={goBackMatrixQuestionnaire}
+          goForth={goForthMatrixQuestinnaire}
+        />
+      )}
+
       {step === "matrix" && user && (
         <MatrixUI
           criteria={criteria}

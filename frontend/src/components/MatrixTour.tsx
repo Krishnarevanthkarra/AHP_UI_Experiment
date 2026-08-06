@@ -111,7 +111,7 @@ export default function MatrixTour({ goBack, onStart }: Props) {
       </div>
 
       <div className="btn-row">
-        <button className="btn-ghost" onClick={() => goBack("setup")}>
+        <button className="btn-ghost" onClick={() => goBack()}>
           ⬅ Back
         </button>
         <button className="btn-primary" onClick={() => onStart("matrix")}>
