@@ -139,6 +139,7 @@ h1 {
   display: flex; /* put children side by side */
   gap: 24px; /* clean space between them */
   align-items: flex-start; /* align at the top */
+  text-align: justify;
 }
 
 .both > div {
@@ -675,4 +676,3 @@ table select {
 .radio-scale label:hover .dot {
   border-color: var(--accent);
 }
-

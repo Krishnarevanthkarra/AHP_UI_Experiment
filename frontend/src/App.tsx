@@ -7,6 +7,7 @@ import Results from "./components/Results";
 import MatrixTour from "./components/MatrixTour";
 import RadioTour from "./components/RadioTour";
 import MatrixQuestionnaire from "./components/MatrixQuestionnaire";
+import RadioQuestionnaire from "./components/RadioQuestionnaire";
 import ThemeToggle from "./components/ThemeToggle";
 import { UIType, UserInfo } from "./types";
 
@@ -18,7 +19,8 @@ type Step =
   | "results"
   | "matrixtour"
   | "radiotour"
-  | "matrixquestionnaire";
+  | "matrixquestionnaire"
+  | "radioquestionnaire";
 
 interface FinalResult {
   weights: number[];
@@ -74,6 +76,12 @@ export default function App() {
   function goForthMatrixQuestinnaire() {
     setStep("radiotour");
   }
+  function goBackRadioQuestionnaire() {
+    setStep("radio");
+  }
+  function goForthRadioQuestinnaire() {
+    setStep("results");
+  }
   const stepIndex = {
     login: 1,
     setup: 2,
@@ -82,7 +90,8 @@ export default function App() {
     matrixquestionnaire: 5,
     radiotour: 6,
     radio: 7,
-    results: 8,
+    radioquestionnaire: 8,
+    results: 9,
   }[step];
 
   return (
@@ -115,7 +124,10 @@ export default function App() {
             07 Radio Compare
           </span>
           <span className={`step ${stepIndex === 8 ? "current" : ""}`}>
-            08 Finish
+            08 Radio Questionnaire
+          </span>
+          <span className={`step ${stepIndex === 9 ? "current" : ""}`}>
+            09 Finish
           </span>
         </div>
         <ThemeToggle />
@@ -157,7 +169,13 @@ export default function App() {
           onFinish={handleFinish}
         />
       )}
-
+      {step === "radioquestionnaire" && (
+        <RadioQuestionnaire
+          user={user}
+          goBack={goBackRadioQuestionnaire}
+          goForth={goForthRadioQuestinnaire}
+        />
+      )}
       {step === "results" && result && (
         <Results name={user?.name} onRestart={handleRestart} />
       )}

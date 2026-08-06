@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { logMatrixQuestionnaire } from "../api";
-import { MatrixQuestionnairePayload, UserInfo } from "../types";
+import { logRadioQuestionnaire } from "../api";
+import { RadioQuestionnairePayload, UserInfo } from "../types";
 
 interface props {
   goBack: () => void;
@@ -8,9 +8,9 @@ interface props {
   user: UserInfo;
 }
 
-export default function MatrixQuestionnaire({ goBack, goForth, user }: props) {
+export default function RadioQuestionnaire({ goBack, goForth, user }: props) {
   const [error, setError] = useState("");
-  const [responses, setResponses] = useState<MatrixQuestionnairePayload>({
+  const [responses, setResponses] = useState<RadioQuestionnairePayload>({
     mental: -1,
     physical: -1,
     temporal: -1,
@@ -46,7 +46,7 @@ export default function MatrixQuestionnaire({ goBack, goForth, user }: props) {
       return;
     }
     setError("");
-    logMatrixQuestionnaire({ ...responses, ...user });
+    logRadioQuestionnaire({ ...responses, ...user });
     goForth();
   }
   const questions = [

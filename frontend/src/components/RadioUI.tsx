@@ -228,9 +228,9 @@ export default function RadioUI({
         <button
           className="btn-primary"
           disabled={CR >= 0.1}
-          onClick={() => onFinish(weights, CR, "results")}
+          onClick={() => onFinish(weights, CR, "radioquestionnaire")}
         >
-          Finish
+          Next
         </button>
       </div>
     </section>
