@@ -45,7 +45,6 @@ export default function MatrixUI({
   criteria,
   user,
   startTime,
-  onFinish,
   goBack,
   goForth,
 }: Props) {
@@ -58,7 +57,7 @@ export default function MatrixUI({
   const voteCounts = useRef<Record<string, number>>({});
 
   const matrix = useMemo(() => matrixFromUpper(n, upper), [n, upper]);
-  const { weights, CR } = useMemo(() => computeAHP(matrix), [matrix]);
+  const { CR } = useMemo(() => computeAHP(matrix), [matrix]);
 
   function elapsed(): number {
     return (Date.now() - startTime) / 1000;

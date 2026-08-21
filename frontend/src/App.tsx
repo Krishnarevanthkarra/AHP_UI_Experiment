@@ -35,7 +35,7 @@ export default function App() {
     education: "B.Tech",
   });
   const criteria = ["Social", "Environment", "Economic"];
-  const [startTime, setStartTime] = useState<number>(0);
+  // const [startTime, setStartTime] = useState<number>(0);
   const [result, setResult] = useState<FinalResult | null>({
     weights: [1, 2, 3],
     cr: 0.1,

@@ -1,0 +1,8 @@
+name: Sustainable Product Ideation
+values:
+  - key: fastapi
+    value: ''
+  - key: OrgJWT
+    value: ''
+  - key: UserJWT
+    value: ''

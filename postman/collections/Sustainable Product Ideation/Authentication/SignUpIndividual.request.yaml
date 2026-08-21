@@ -1,0 +1,18 @@
+$kind: http-request
+name: SignUpIndividual
+url: "{{fastapi}}/auth/signup/individual"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"fullname\": \"Krishna revanth Karra\",\r
+
+    \    \"password\": \"12345\",\r
+
+    \    \"email\":\"krishnarevanth2004@gmail.com\",\r
+
+    \    \"createdAt\": \"{{$isoTimestamp}}\"\r
+
+    }"
+order: 1786604490048

@@ -1,4 +1,4 @@
-import type { UIType } from "../types";
+// import type { UIType } from "../types";
 import type { Step } from "../App";
 interface Props {
   goForth: (step: Step) => void;

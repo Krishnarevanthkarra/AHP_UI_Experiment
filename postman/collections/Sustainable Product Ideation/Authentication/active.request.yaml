@@ -1,0 +1,5 @@
+$kind: http-request
+name: active
+url: "{{fastapi}}/"
+method: GET
+order: 1091957254345

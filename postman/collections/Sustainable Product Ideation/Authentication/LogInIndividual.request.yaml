@@ -1,0 +1,16 @@
+$kind: http-request
+name: LogInIndividual
+url: "{{fastapi}}/auth/login/individual"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\": \"krishnarevanth2004@gmail.com\",\r
+
+    \    \"password\": \"12345\",\r
+
+    \    \"devicename\": \"Windows 11\"\r
+
+    }"
+order: 4500124025257438

@@ -1,0 +1,18 @@
+$kind: http-request
+name: SingUpOrganization
+url: "{{fastapi}}/auth/signup/organization"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"organizationName\": \"Aardhna\",\r
+
+    \    \"password\": \"1233\",\r
+
+    \    \"email\": \"hel@gmail.com\",\r
+
+    \    \"createdAt\": \"{{$isoTimestamp}}\"\r
+
+    }"
+order: 4253155715198345

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UIType } from "../types";
+// import { UIType } from "../types";
 import type { Step } from "../App";
 
 interface Props {
@@ -18,20 +18,20 @@ const DEFAULTS = [
 ];
 
 export default function Setup({ goBack, goForth }: Props) {
-  const [uiType, setUiType] = useState<UIType>("matrix");
-  const [count, setCount] = useState(3);
+  // const [uiType, setUiType] = useState<UIType>("matrix");
+  // const [count, setCount] = useState(3);
   const [names, setNames] = useState<string[]>(DEFAULTS.slice(0, 3));
 
-  function updateCount(raw: number) {
-    const clamped = Math.min(8, Math.max(2, raw || 2));
-    setCount(clamped);
-    setNames((prev) => {
-      const next = prev.slice(0, clamped);
-      while (next.length < clamped)
-        next.push(DEFAULTS[next.length] || `Criterion ${next.length + 1}`);
-      return next;
-    });
-  }
+  // function updateCount(raw: number) {
+  //   const clamped = Math.min(8, Math.max(2, raw || 2));
+  //   setCount(clamped);
+  //   setNames((prev) => {
+  //     const next = prev.slice(0, clamped);
+  //     while (next.length < clamped)
+  //       next.push(DEFAULTS[next.length] || `Criterion ${next.length + 1}`);
+  //     return next;
+  //   });
+  // }
 
   function updateName(i: number, value: string) {
     setNames((prev) => prev.map((n, idx) => (idx === i ? value : n)));

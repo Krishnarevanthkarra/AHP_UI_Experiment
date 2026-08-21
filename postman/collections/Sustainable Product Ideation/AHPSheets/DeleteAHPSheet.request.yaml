@@ -1,0 +1,13 @@
+$kind: http-request
+name: DeleteAHPSheet
+url: "{{fastapi}}/ahp/delete_ahpSheet/:sheeId"
+method: DELETE
+pathVariables:
+  - key: sheeId
+    value: 6a8548902b033d354c56778c
+    description: ""
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2YTgyYWEzYjUxODYxNTM2YjU0Njk3MWEiLCJzZXNzaW9uaWQiOiI2YTg1NDQ3OTBjNDA0MTc1MjI5YzcxYzUiLCJleHAiOjE3ODcxMjA1MTN9.xLsVczzKSjEB2vhBtLTjSeU-I7z4-uh1dPETd-2MgNI
+order: 193351631278342

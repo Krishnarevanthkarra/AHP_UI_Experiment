@@ -39,7 +39,7 @@ export default function RadioUI({
   criteria,
   user,
   startTime,
-  onFinish,
+  // onFinish,
   goBack,
   goForth,
 }: Props) {
@@ -68,7 +68,7 @@ export default function RadioUI({
     [winners, values, n],
   );
   const matrix = useMemo(() => matrixFromUpper(n, upper), [n, upper]);
-  const { weights, CR } = useMemo(() => computeAHP(matrix), [matrix]);
+  const {  CR } = useMemo(() => computeAHP(matrix), [matrix]);
 
   function handleWinnerChange(
     i: number,
