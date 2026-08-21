@@ -1,0 +1,2011 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#082653" />
+
+    <title>AHP Sheet 1 | Research Study</title>
+
+    <style>
+      /* =========================================================
+   GLOBAL
+   ========================================================= */
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #f5f8fc;
+
+        color: #172943;
+
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+          sans-serif;
+      }
+
+      /* =========================================================
+   HEADER
+   ========================================================= */
+
+      .header {
+        min-height: 78px;
+
+        background: linear-gradient(
+          120deg,
+          #061d42 0%,
+          #0b2e61 50%,
+          #082653 100%
+        );
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 28px;
+      }
+
+      .header-left {
+        display: flex;
+
+        align-items: center;
+
+        gap: 13px;
+      }
+
+      .header-icon {
+        width: 43px;
+
+        height: 43px;
+
+        border: 1px solid rgba(255, 255, 255, 0.28);
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 17px;
+
+        font-weight: 800;
+      }
+
+      .header-title {
+        font-size: 13px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.4px;
+      }
+
+      .participant-badge {
+        padding: 7px 13px;
+
+        border: 1px solid rgba(255, 255, 255, 0.22);
+
+        border-radius: 10px;
+
+        background: rgba(255, 255, 255, 0.08);
+
+        font-size: 11px;
+      }
+
+      /* =========================================================
+   MAIN
+   ========================================================= */
+
+      .main {
+        width: 100%;
+
+        max-width: 1200px;
+
+        margin: 0 auto;
+
+        padding: 24px 18px 45px;
+      }
+
+      /* =========================================================
+   TITLE
+   ========================================================= */
+
+      .title-area {
+        margin-bottom: 15px;
+      }
+
+      .eyebrow {
+        color: #1764e8;
+
+        font-size: 11px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.5px;
+
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 4px 0 5px;
+
+        color: #10284d;
+
+        font-size: 27px;
+
+        line-height: 1.2;
+      }
+
+      .description {
+        margin: 0;
+
+        color: #607086;
+
+        font-size: 13px;
+      }
+
+      /* =========================================================
+   INSTRUCTION
+   ========================================================= */
+
+      .instruction {
+        margin: 13px 0 14px;
+
+        padding: 11px 14px;
+
+        border: 1px solid #cbdcff;
+
+        border-radius: 7px;
+
+        background: #edf4ff;
+
+        color: #214d8e;
+
+        font-size: 12px;
+
+        line-height: 1.55;
+      }
+
+      /* =========================================================
+   TABLE
+   ========================================================= */
+
+      .table-card {
+        width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+        background: white;
+
+        border: 1px solid #d8e1eb;
+
+        border-radius: 8px;
+
+        box-shadow: 0 4px 15px rgba(20, 50, 90, 0.05);
+      }
+
+      table {
+        width: 100%;
+
+        min-width: 920px;
+
+        border-collapse: collapse;
+
+        table-layout: fixed;
+      }
+
+      thead th {
+        height: 34px;
+
+        padding: 6px;
+
+        background: #f4f7fb;
+
+        color: #536279;
+
+        border-bottom: 1px solid #d8e1eb;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-align: center;
+      }
+
+      thead th:nth-child(1) {
+        width: 40px;
+      }
+
+      thead th:nth-child(2) {
+        width: 29%;
+      }
+
+      thead th:nth-child(3) {
+        width: 29%;
+      }
+
+      thead th:nth-child(4) {
+        width: 27%;
+      }
+
+      /* =========================================================
+   TABLE ROWS
+   ========================================================= */
+
+      tbody tr:nth-child(odd) {
+        background: #f8fbff;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #ffffff;
+      }
+
+      tbody tr:hover {
+        background: #f1f6fd;
+      }
+
+      td {
+        padding: 7px 6px;
+
+        border-bottom: 1px solid #dfe6ee;
+
+        font-size: 12px;
+
+        vertical-align: middle;
+      }
+
+      .number {
+        text-align: center;
+
+        color: #59697e;
+
+        font-weight: 700;
+      }
+
+      /* =========================================================
+   A / B OPTIONS
+   ========================================================= */
+
+      .option label {
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 6px;
+
+        padding: 4px;
+
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        line-height: 1.35;
+
+        transition:
+          background 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .option input {
+        margin: 1px 0 0;
+
+        accent-color: #2464d8;
+
+        cursor: pointer;
+      }
+
+      .option-text {
+        display: inline-block;
+      }
+
+      /* =========================================================
+   RECOMMENDED A / B
+   ========================================================= */
+
+      .option.recommended label {
+        background: #e5f7d9;
+
+        box-shadow: inset 0 0 0 2px #68b449;
+
+        color: #397526;
+
+        font-weight: 800;
+      }
+
+      .option.recommended input {
+        accent-color: #4c9a2c;
+      }
+
+      /* =========================================================
+   STRENGTH
+   ========================================================= */
+
+      .strength-cell {
+        text-align: center;
+      }
+
+      .strength-options {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 4px;
+
+        white-space: nowrap;
+      }
+
+      .strength-option {
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 2px;
+
+        min-width: 27px;
+
+        padding: 4px 2px;
+
+        border-radius: 5px;
+
+        color: #58677c;
+
+        font-size: 11px;
+
+        cursor: pointer;
+
+        transition:
+          background 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .strength-option input {
+        margin: 0;
+
+        accent-color: #2464d8;
+
+        cursor: pointer;
+      }
+
+      /* =========================================================
+   RECOMMENDED STRENGTH
+   ========================================================= */
+
+      .strength-option.recommended {
+        background: #e5f7d9;
+
+        box-shadow: inset 0 0 0 2px #68b449;
+
+        color: #397526;
+
+        font-weight: 800;
+      }
+
+      .strength-option.recommended input {
+        accent-color: #4c9a2c;
+      }
+
+      /* =========================================================
+   CURRENT STRENGTH
+   ========================================================= */
+
+      .strength-option.current {
+        box-shadow: inset 0 0 0 1px #aebaca;
+      }
+
+      /* =========================================================
+   REVIEW ROW
+   ========================================================= */
+
+      tbody tr.needs-review {
+        box-shadow: inset 4px 0 0 #68b449;
+      }
+
+      /* =========================================================
+   RECOMMENDATION BOX
+   ========================================================= */
+
+      .row-recommendation {
+        display: none;
+
+        margin-top: 5px;
+
+        padding: 5px 7px;
+
+        border: 1px solid #b9dfa3;
+
+        border-radius: 5px;
+
+        background: #edf9e7;
+
+        color: #397526;
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        line-height: 1.4;
+
+        text-align: center;
+      }
+
+      tbody tr.needs-review .row-recommendation {
+        display: block;
+      }
+
+      /* =========================================================
+   BOTTOM
+   ========================================================= */
+
+      .bottom {
+        margin-top: 14px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+      }
+
+      /* =========================================================
+   CR BOX
+   ========================================================= */
+
+      .cr {
+        padding: 9px 12px;
+
+        border: 1px solid #d8e1eb;
+
+        border-radius: 7px;
+
+        background: #f0f5fa;
+
+        color: #43536a;
+
+        font-size: 12px;
+
+        line-height: 1.45;
+      }
+
+      .cr.good {
+        background: #eaf9f2;
+
+        border-color: #b9e8d3;
+
+        color: #087b59;
+      }
+
+      .cr.bad {
+        background: #fff1f2;
+
+        border-color: #ffc5ca;
+
+        color: #b4232d;
+      }
+
+      /* =========================================================
+   CALCULATE
+   ========================================================= */
+
+      .calculate {
+        height: 42px;
+
+        padding: 0 22px;
+
+        border: none;
+
+        border-radius: 7px;
+
+        background: #2462cf;
+
+        color: white;
+
+        font-family: inherit;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+      }
+
+      .calculate:hover {
+        background: #1e56ba;
+      }
+
+      .calculate:disabled {
+        opacity: 0.55;
+
+        cursor: not-allowed;
+      }
+
+      /* =========================================================
+   MESSAGE
+   ========================================================= */
+
+      .message {
+        display: none;
+
+        margin-top: 10px;
+
+        padding: 10px 12px;
+
+        border-radius: 7px;
+
+        font-size: 12px;
+
+        line-height: 1.5;
+
+        text-align: center;
+      }
+
+      .message.error {
+        display: block;
+
+        background: #fff1f2;
+
+        color: #b4232d;
+
+        border: 1px solid #ffc5ca;
+      }
+
+      .message.success {
+        display: block;
+
+        background: #eaf9f2;
+
+        color: #087b59;
+
+        border: 1px solid #b9e8d3;
+      }
+
+      /* =========================================================
+   SUBMIT
+   ========================================================= */
+
+      .submit-area {
+        display: none;
+
+        margin-top: 12px;
+      }
+
+      .submit-button {
+        width: 100%;
+
+        height: 46px;
+
+        border: none;
+
+        border-radius: 7px;
+
+        background: linear-gradient(90deg, #285bc7, #2866d5);
+
+        color: white;
+
+        font-family: inherit;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+      }
+
+      .submit-button:disabled {
+        opacity: 0.55;
+
+        cursor: not-allowed;
+      }
+
+      /* =========================================================
+   MOBILE
+   ========================================================= */
+
+      @media (max-width: 700px) {
+        .header {
+          min-height: 68px;
+
+          padding: 0 11px;
+        }
+
+        .header-icon {
+          width: 36px;
+
+          height: 36px;
+
+          font-size: 15px;
+        }
+
+        .header-title {
+          font-size: 9px;
+        }
+
+        .participant-badge {
+          padding: 5px 7px;
+
+          font-size: 8px;
+        }
+
+        .main {
+          padding: 18px 9px 35px;
+        }
+
+        h1 {
+          font-size: 21px;
+        }
+
+        .description {
+          font-size: 11px;
+        }
+
+        .instruction {
+          font-size: 10px;
+        }
+
+        table {
+          min-width: 920px;
+        }
+
+        .bottom {
+          align-items: stretch;
+
+          flex-direction: column;
+        }
+
+        .calculate {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .header-title {
+          display: none;
+        }
+
+        .participant-badge {
+          margin-left: auto;
+        }
+
+        h1 {
+          font-size: 19px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+    <header class="header">
+      <div class="header-left">
+        <div class="header-icon">A</div>
+
+        <div class="header-title">AHP PRIORITY ASSESSMENT — SHEET 1</div>
+      </div>
+
+      <div id="participantBadge" class="participant-badge">Participant: —</div>
+    </header>
+
+    <!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+    <main class="main">
+      <div class="title-area">
+        <div class="eyebrow">PAIRWISE COMPARISON</div>
+
+        <h1>Recovery Time / Urgency</h1>
+
+        <p class="description">
+          Compare each pair and indicate which option is more important, and by
+          how much.
+        </p>
+      </div>
+
+      <!-- =======================================================
+       INSTRUCTIONS
+       ======================================================= -->
+
+      <div class="instruction">
+        <strong>How to respond:</strong>
+
+        For every comparison, select which option you consider more important:
+        <strong>A</strong> or <strong>B</strong>. Then select the strength of
+        your preference from <strong>1 to 9</strong>.
+
+        <br /><br />
+
+        <strong>1</strong> means the two options are equally important.
+
+        <strong>2–3</strong> indicate a small preference, <strong>4–5</strong> a
+        stronger preference, and <strong>6–9</strong> increasingly strong
+        preference.
+
+        <br /><br />
+
+        Every comparison starts with
+        <strong>B + 1</strong> as the default. Please change it whenever your
+        professional judgment differs from the default.
+      </div>
+
+      <!-- =======================================================
+       TABLE
+       ======================================================= -->
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+
+              <th>A — w.r.t. AHP priorities</th>
+
+              <th>B</th>
+
+              <th>How much more?</th>
+            </tr>
+          </thead>
+
+          <tbody id="comparisonTable"></tbody>
+        </table>
+      </div>
+
+      <!-- =======================================================
+       CR
+       ======================================================= -->
+
+      <div class="bottom">
+        <div id="crDisplay" class="cr">
+          CR = —
+
+          <br />
+
+          Please calculate the consistency ratio.
+        </div>
+
+        <button id="calculateButton" class="calculate" type="button">
+          Calculate
+        </button>
+      </div>
+
+      <!-- =======================================================
+       MESSAGE
+       ======================================================= -->
+
+      <div id="message" class="message"></div>
+
+      <!-- =======================================================
+       SUBMIT
+       ======================================================= -->
+
+      <div id="submitArea" class="submit-area">
+        <button id="submitButton" class="submit-button" type="button">
+          Submit AHP Sheet 1
+        </button>
+      </div>
+    </main>
+
+    <script>
+      /* =========================================================
+   PARTICIPANT ID
+   ========================================================= */
+
+      let participantID = sessionStorage.getItem("participantID");
+
+      /*
+       * Also allow URL parameter.
+       */
+
+      if (!participantID) {
+        const params = new URLSearchParams(window.location.search);
+
+        participantID = params.get("participantID");
+      }
+
+      if (!participantID) {
+        participantID = "UNKNOWN";
+      }
+
+      document.getElementById("participantBadge").textContent =
+        "Participant: " + participantID;
+
+      /* =========================================================
+   AHP OPTIONS
+   ========================================================= */
+
+      const options = [
+        "Recovery within days",
+
+        "Recovery within weeks",
+
+        "Recovery within months",
+
+        "Recovery within years",
+
+        "No recovery during individual's lifetime",
+
+        "Consequences transmitted to next generation",
+      ];
+
+      /* =========================================================
+   CREATE 15 PAIRS
+   ========================================================= */
+
+      const pairs = [];
+
+      for (let i = 0; i < options.length; i++) {
+        for (let j = i + 1; j < options.length; j++) {
+          pairs.push({
+            number: pairs.length + 1,
+
+            a: options[i],
+
+            b: options[j],
+          });
+        }
+      }
+
+      /* =========================================================
+   BUILD TABLE
+   ========================================================= */
+
+      const table = document.getElementById("comparisonTable");
+
+      pairs.forEach(function (pair) {
+        const row = document.createElement("tr");
+
+        row.id = "row_" + pair.number;
+
+        row.innerHTML = `
+
+      <!-- NUMBER -->
+
+      <td class="number">
+
+        ${pair.number}
+
+      </td>
+
+
+      <!-- A -->
+
+      <td
+        class="option option-a"
+      >
+
+        <label>
+
+          <input
+            type="radio"
+            name="side_${pair.number}"
+            value="A"
+          >
+
+          <span class="option-text">
+            ${pair.a}
+          </span>
+
+        </label>
+
+      </td>
+
+
+      <!-- B DEFAULT -->
+
+      <td
+        class="option option-b"
+      >
+
+        <label>
+
+          <input
+            type="radio"
+            name="side_${pair.number}"
+            value="B"
+            checked
+          >
+
+          <span class="option-text">
+            ${pair.b}
+          </span>
+
+        </label>
+
+      </td>
+
+
+      <!-- STRENGTH -->
+
+      <td
+        class="strength-cell"
+      >
+
+        <div
+          class="strength-options"
+        >
+
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9]
+            .map(function (value) {
+              return `
+
+                  <label
+                    class="strength-option
+                    ${value === 1 ? "current" : ""}"
+                    data-value="${value}"
+                  >
+
+                    <input
+                      type="radio"
+                      name="strength_${pair.number}"
+                      value="${value}"
+                      ${value === 1 ? "checked" : ""}
+                    >
+
+                    ${value}
+
+                  </label>
+
+                `;
+            })
+            .join("")}
+
+        </div>
+
+
+        <div
+          class="row-recommendation"
+        ></div>
+
+      </td>
+
+    `;
+
+        table.appendChild(row);
+      });
+
+      /* =========================================================
+   GET RESPONSE
+   ========================================================= */
+
+      function getResponse(pair) {
+        const side = document.querySelector(
+          `input[name="side_${pair.number}"]:checked`,
+        );
+
+        const strength = document.querySelector(
+          `input[name="strength_${pair.number}"]:checked`,
+        );
+
+        /*
+         * Both must exist.
+         */
+
+        if (!side || !strength) {
+          return null;
+        }
+
+        const intensity = Number(strength.value);
+
+        /*
+         * A selected.
+         */
+
+        if (side.value === "A") {
+          return {
+            preferred: pair.a,
+
+            side: "A",
+
+            intensity: intensity,
+
+            value: intensity,
+          };
+        }
+
+        /*
+         * B selected.
+         */
+
+        return {
+          preferred: pair.b,
+
+          side: "B",
+
+          intensity: intensity,
+
+          value: 1 / intensity,
+        };
+      }
+
+      /* =========================================================
+   BUILD AHP MATRIX
+   ========================================================= */
+
+      function buildMatrix(replacementIndex = null, replacementValue = null) {
+        const n = options.length;
+
+        const matrix = Array.from(
+          {
+            length: n,
+          },
+          function () {
+            return Array(n).fill(1);
+          },
+        );
+
+        for (let i = 0; i < pairs.length; i++) {
+          const pair = pairs[i];
+
+          const response = getResponse(pair);
+
+          if (!response) {
+            return null;
+          }
+
+          let value = response.value;
+
+          /*
+           * Temporarily replace one judgment
+           * while testing recommendations.
+           */
+
+          if (replacementIndex !== null && i === replacementIndex) {
+            value = replacementValue;
+          }
+
+          const aIndex = options.indexOf(pair.a);
+
+          const bIndex = options.indexOf(pair.b);
+
+          matrix[aIndex][bIndex] = value;
+
+          matrix[bIndex][aIndex] = 1 / value;
+        }
+
+        return matrix;
+      }
+
+      /* =========================================================
+   CALCULATE AHP
+   ========================================================= */
+
+      function calculateFromMatrix(matrix) {
+        if (!matrix) {
+          return null;
+        }
+
+        const n = matrix.length;
+
+        /*
+         * GEOMETRIC MEAN
+         */
+
+        const geometricMeans = [];
+
+        for (let i = 0; i < n; i++) {
+          let product = 1;
+
+          for (let j = 0; j < n; j++) {
+            product *= matrix[i][j];
+          }
+
+          geometricMeans.push(Math.pow(product, 1 / n));
+        }
+
+        /*
+         * NORMALISE
+         */
+
+        const total = geometricMeans.reduce(function (sum, value) {
+          return sum + value;
+        }, 0);
+
+        const weights = geometricMeans.map(function (value) {
+          return value / total;
+        });
+
+        /*
+         * WEIGHTED SUM
+         */
+
+        const weightedSum = [];
+
+        for (let i = 0; i < n; i++) {
+          let sum = 0;
+
+          for (let j = 0; j < n; j++) {
+            sum += matrix[i][j] * weights[j];
+          }
+
+          weightedSum.push(sum);
+        }
+
+        /*
+         * LAMBDA MAX
+         */
+
+        let lambdaMax = 0;
+
+        for (let i = 0; i < n; i++) {
+          lambdaMax += weightedSum[i] / weights[i];
+        }
+
+        lambdaMax /= n;
+
+        /*
+         * CONSISTENCY INDEX
+         */
+
+        const CI = (lambdaMax - n) / (n - 1);
+
+        /*
+         * RI FOR N = 6
+         */
+
+        const RI = 1.24;
+
+        /*
+         * CONSISTENCY RATIO
+         */
+
+        const CR = CI / RI;
+
+        return {
+          matrix: matrix,
+
+          weights: weights,
+
+          lambdaMax: lambdaMax,
+
+          CI: CI,
+
+          RI: RI,
+
+          CR: CR,
+
+          crPercent: CR * 100,
+        };
+      }
+
+      /* =========================================================
+   CALCULATE CURRENT AHP
+   ========================================================= */
+
+      function calculateAHP() {
+        const matrix = buildMatrix();
+
+        if (!matrix) {
+          showMessage(
+            "Please complete all pairwise comparisons.",
+
+            true,
+          );
+
+          return null;
+        }
+
+        return calculateFromMatrix(matrix);
+      }
+
+      /* =========================================================
+   JUDGMENT DISTANCE
+   =========================================================
+
+   This is the IMPORTANT NEW ALGORITHM.
+
+   The judgments are treated as an ordered AHP scale:
+
+       A9
+       A8
+       A7
+       ...
+       A2
+       A1
+       B1
+       B2
+       B3
+       ...
+       B9
+
+   A1 and B1 are mathematically identical
+   because both have an AHP value of 1.
+
+   The function returns how many steps away
+   another judgment is from the participant's
+   current judgment.
+
+   Example:
+
+       Current B9
+
+       B8 = distance 1
+       B7 = distance 2
+       B6 = distance 3
+       B5 = distance 4
+
+   ========================================================= */
+
+      function judgmentDistance(
+        currentSide,
+        currentStrength,
+        candidateSide,
+        candidateStrength,
+      ) {
+        /*
+         * Convert each judgment to an ordered
+         * position around the equal point.
+         *
+         * B9 = +9
+         * B8 = +8
+         * ...
+         * B1 = 0
+         *
+         * A1 = 0
+         * A2 = -2
+         * ...
+         * A9 = -9
+         */
+
+        function position(side, strength) {
+          if (strength === 1) {
+            return 0;
+          }
+
+          if (side === "B") {
+            return strength;
+          }
+
+          return -strength;
+        }
+
+        const current = position(currentSide, currentStrength);
+
+        const candidate = position(candidateSide, candidateStrength);
+
+        return Math.abs(current - candidate);
+      }
+
+      /* =========================================================
+   GENERATE ALL 18 POSSIBILITIES
+   ========================================================= */
+
+      function generateAlternatives(pairIndex) {
+        const alternatives = [];
+
+        /*
+         * A + 1 ... A + 9
+         */
+
+        for (let strength = 1; strength <= 9; strength++) {
+          alternatives.push({
+            side: "A",
+
+            strength: strength,
+
+            value: strength,
+          });
+        }
+
+        /*
+         * B + 1 ... B + 9
+         */
+
+        for (let strength = 1; strength <= 9; strength++) {
+          alternatives.push({
+            side: "B",
+
+            strength: strength,
+
+            value: 1 / strength,
+          });
+        }
+
+        /*
+         * Calculate projected CR
+         * for every alternative.
+         */
+
+        alternatives.forEach(function (alternative) {
+          const matrix = buildMatrix(pairIndex, alternative.value);
+
+          const result = calculateFromMatrix(matrix);
+
+          if (result) {
+            alternative.cr = result.CR;
+
+            alternative.crPercent = result.crPercent;
+          } else {
+            alternative.cr = null;
+
+            alternative.crPercent = null;
+          }
+        });
+
+        return alternatives;
+      }
+
+      /* =========================================================
+   FIND CLOSEST ACCEPTABLE JUDGMENT
+   =========================================================
+
+   NEW ALGORITHM:
+
+   We do NOT choose the lowest possible CR.
+
+   We choose the CLOSEST judgment to the
+   participant's current judgment that:
+
+       projected CR <= 10%
+
+   If multiple judgments have the same
+   distance, choose the one with the
+   lowest projected CR.
+
+   ========================================================= */
+
+      function findClosestAcceptable(pairIndex) {
+        const pair = pairs[pairIndex];
+
+        const current = getResponse(pair);
+
+        if (!current) {
+          return null;
+        }
+
+        const alternatives = generateAlternatives(pairIndex);
+
+        /*
+         * Calculate distance for every
+         * possible alternative.
+         */
+
+        alternatives.forEach(function (alternative) {
+          alternative.distance = judgmentDistance(
+            current.side,
+
+            current.intensity,
+
+            alternative.side,
+
+            alternative.strength,
+          );
+
+          /*
+           * Is this the exact current judgment?
+           */
+
+          alternative.isCurrent =
+            alternative.side === current.side &&
+            alternative.strength === current.intensity;
+        });
+
+        /*
+         * We only want alternatives that
+         * produce CR <= 10%.
+         */
+
+        const acceptable = alternatives.filter(function (alternative) {
+          return (
+            !alternative.isCurrent &&
+            alternative.cr !== null &&
+            alternative.cr <= 0.1
+          );
+        });
+
+        if (acceptable.length === 0) {
+          return null;
+        }
+
+        /*
+         * Sort by:
+         *
+         * 1. Closest judgment
+         * 2. Lowest CR if equally close
+         */
+
+        acceptable.sort(function (a, b) {
+          if (a.distance !== b.distance) {
+            return a.distance - b.distance;
+          }
+
+          return a.cr - b.cr;
+        });
+
+        return acceptable[0];
+      }
+
+      /* =========================================================
+   FIND BEST ROWS TO RECOMMEND
+   ========================================================= */
+
+      function findBestComparisons(currentResult) {
+        const candidates = [];
+
+        for (let i = 0; i < pairs.length; i++) {
+          const recommendation = findClosestAcceptable(i);
+
+          if (!recommendation) {
+            continue;
+          }
+
+          /*
+           * How much does this recommendation
+           * improve CR?
+           */
+
+          const improvement = currentResult.CR - recommendation.cr;
+
+          candidates.push({
+            index: i,
+
+            pair: pairs[i],
+
+            recommendation: recommendation,
+
+            improvement: improvement,
+          });
+        }
+
+        /*
+         * We want to show the rows that
+         * actually provide the largest
+         * improvement.
+         */
+
+        candidates.sort(function (a, b) {
+          return b.improvement - a.improvement;
+        });
+
+        /*
+         * Show maximum 3 rows.
+         */
+
+        return candidates.slice(0, 3);
+      }
+
+      /* =========================================================
+   CLEAR RECOMMENDATIONS
+   ========================================================= */
+
+      function clearRecommendations() {
+        document.querySelectorAll(".recommended").forEach(function (element) {
+          element.classList.remove("recommended");
+        });
+
+        document.querySelectorAll(".needs-review").forEach(function (row) {
+          row.classList.remove("needs-review");
+        });
+
+        document
+          .querySelectorAll(".row-recommendation")
+          .forEach(function (element) {
+            element.innerHTML = "";
+          });
+      }
+
+      /* =========================================================
+   MARK CURRENT JUDGMENTS
+   ========================================================= */
+
+      function markCurrentJudgments() {
+        pairs.forEach(function (pair) {
+          const response = getResponse(pair);
+
+          if (!response) {
+            return;
+          }
+
+          const row = document.getElementById("row_" + pair.number);
+
+          if (!row) {
+            return;
+          }
+
+          const strength = row.querySelector(
+            `.strength-option[data-value="${response.intensity}"]`,
+          );
+
+          if (strength) {
+            strength.classList.add("current");
+          }
+        });
+      }
+
+      /* =========================================================
+   APPLY RECOMMENDATIONS
+   ========================================================= */
+
+      function applyRecommendations(currentResult) {
+        clearRecommendations();
+
+        markCurrentJudgments();
+
+        /*
+         * Don't recommend anything when
+         * consistency is already acceptable.
+         */
+
+        if (currentResult.CR <= 0.1) {
+          return;
+        }
+
+        const candidates = findBestComparisons(currentResult);
+
+        candidates.forEach(function (candidate) {
+          const pair = candidate.pair;
+
+          const alternative = candidate.recommendation;
+
+          const row = document.getElementById("row_" + pair.number);
+
+          if (!row) {
+            return;
+          }
+
+          row.classList.add("needs-review");
+
+          /*
+           * =====================================================
+           * HIGHLIGHT A OR B
+           * =====================================================
+           */
+
+          let optionElement;
+
+          if (alternative.side === "A") {
+            optionElement = row.querySelector(".option-a");
+          } else {
+            optionElement = row.querySelector(".option-b");
+          }
+
+          if (optionElement) {
+            optionElement.classList.add("recommended");
+          }
+
+          /*
+           * =====================================================
+           * HIGHLIGHT EXACT STRENGTH
+           * =====================================================
+           */
+
+          const strengthElement = row.querySelector(
+            `.strength-option[data-value="${alternative.strength}"]`,
+          );
+
+          if (strengthElement) {
+            strengthElement.classList.add("recommended");
+          }
+
+          /*
+           * =====================================================
+           * WRITE EXACT INSTRUCTION
+           * =====================================================
+           */
+
+          const box = row.querySelector(".row-recommendation");
+
+          if (!box) {
+            return;
+          }
+
+          const sideText = alternative.side;
+
+          const crText = alternative.crPercent.toFixed(2) + "%";
+
+          const currentResponse = getResponse(pair);
+
+          const currentText =
+            currentResponse.side + " + " + currentResponse.intensity;
+
+          const recommendedText =
+            alternative.side + " + " + alternative.strength;
+
+          let description;
+
+          if (alternative.strength === 1) {
+            description = "equal importance";
+          } else {
+            const preferredOption = alternative.side === "A" ? pair.a : pair.b;
+
+            description =
+              preferredOption +
+              " is " +
+              alternative.strength +
+              "× more important";
+          }
+
+          box.innerHTML =
+            "✓ Recommended: " +
+            "<strong>" +
+            "Select " +
+            recommendedText +
+            "</strong>" +
+            " — " +
+            description +
+            " → projected CR = " +
+            crText +
+            "<br>" +
+            "<span style='font-weight:600'>" +
+            "Current judgment: " +
+            currentText +
+            "</span>";
+        });
+      }
+
+      /* =========================================================
+   CALCULATE BUTTON
+   ========================================================= */
+
+      document.getElementById("calculateButton").addEventListener(
+        "click",
+
+        function () {
+          const result = calculateAHP();
+
+          if (!result) {
+            return;
+          }
+
+          const cr = result.crPercent;
+
+          const crDisplay = document.getElementById("crDisplay");
+
+          /*
+           * =====================================================
+           * CR ACCEPTABLE
+           * =====================================================
+           */
+
+          if (cr <= 10) {
+            clearRecommendations();
+
+            crDisplay.className = "cr good";
+
+            crDisplay.innerHTML =
+              "CR = " +
+              cr.toFixed(2) +
+              "%<br>" +
+              "Consistency is acceptable. You may proceed.";
+
+            document.getElementById("submitArea").style.display = "block";
+
+            showMessage(
+              "Your consistency ratio is acceptable. You may submit Sheet 1.",
+
+              false,
+            );
+          } else {
+
+          /*
+           * =====================================================
+           * CR NOT ACCEPTABLE
+           * ===================================================== */
+            crDisplay.className = "cr bad";
+
+            crDisplay.innerHTML =
+              "CR = " +
+              cr.toFixed(2) +
+              "%<br>" +
+              "Please review the highlighted judgments.";
+
+            document.getElementById("submitArea").style.display = "none";
+
+            applyRecommendations(result);
+
+            showMessage(
+              "Your consistency ratio is above 10%. The green recommendations show the closest alternative judgments that would bring the consistency ratio to 10% or below. Change a judgment only if the recommended alternative reflects your professional assessment.",
+
+              true,
+            );
+          }
+        },
+      );
+
+      /* =========================================================
+   A/B RADIO BEHAVIOUR
+   =========================================================
+
+   Selecting A/B DOES NOT change 1–9.
+
+   Example:
+
+       B + 1
+
+   click A →
+
+       A + 1
+
+   ========================================================= */
+
+      document
+        .querySelectorAll('input[name^="side_"]')
+        .forEach(function (input) {
+          input.addEventListener("change", function () {
+            const number = input.name.replace("side_", "");
+
+            /*
+             * Do NOT change strength.
+             */
+
+            /*
+             * Previous recommendations are
+             * no longer valid.
+             */
+
+            clearRecommendations();
+
+            /*
+             * Requiring recalculation means
+             * submission disappears.
+             */
+
+            document.getElementById("submitArea").style.display = "none";
+
+            updateCurrentVisual(number);
+          });
+        });
+
+      /* =========================================================
+   STRENGTH RADIO BEHAVIOUR
+   =========================================================
+
+   Selecting 1–9 DOES NOT change A/B.
+
+   Example:
+
+       B + 1
+
+   click 5 →
+
+       B + 5
+
+   ========================================================= */
+
+      document
+        .querySelectorAll('input[name^="strength_"]')
+        .forEach(function (input) {
+          input.addEventListener("change", function () {
+            const number = input.name.replace("strength_", "");
+
+            /*
+             * Do NOT change A/B.
+             */
+
+            clearRecommendations();
+
+            document.getElementById("submitArea").style.display = "none";
+
+            updateCurrentVisual(number);
+          });
+        });
+
+      /* =========================================================
+   UPDATE CURRENT VISUAL
+   ========================================================= */
+
+      function updateCurrentVisual(number) {
+        const row = document.getElementById("row_" + number);
+
+        if (!row) {
+          return;
+        }
+
+        row.querySelectorAll(".current").forEach(function (element) {
+          element.classList.remove("current");
+        });
+
+        const pair = pairs[number - 1];
+
+        const response = getResponse(pair);
+
+        if (!response) {
+          return;
+        }
+
+        const strength = row.querySelector(
+          `.strength-option[data-value="${response.intensity}"]`,
+        );
+
+        if (strength) {
+          strength.classList.add("current");
+        }
+      }
+
+      /* =========================================================
+   COLLECT RESPONSES
+   ========================================================= */
+
+      function collectResponses() {
+        const responses = [];
+
+        for (let i = 0; i < pairs.length; i++) {
+          const pair = pairs[i];
+
+          const response = getResponse(pair);
+
+          if (!response) {
+            return null;
+          }
+
+          responses.push({
+            comparisonNo: pair.number,
+
+            optionA: pair.a,
+
+            optionB: pair.b,
+
+            selectedSide: response.side,
+
+            selectedOption: response.preferred,
+
+            strength: response.intensity,
+
+            ahpValue: response.value,
+          });
+        }
+
+        return responses;
+      }
+
+      /* =========================================================
+   SUBMIT
+   ========================================================= */
+
+      document.getElementById("submitButton").addEventListener(
+        "click",
+
+        function () {
+          /*
+           * Final calculation.
+           */
+
+          const result = calculateAHP();
+
+          if (!result) {
+            return;
+          }
+
+          /*
+           * CR must be <= 10%.
+           */
+
+          if (result.CR > 0.1) {
+            applyRecommendations(result);
+
+            showMessage(
+              "Your consistency ratio is still above 10%. Please review the highlighted recommendations and recalculate.",
+
+              true,
+            );
+
+            return;
+          }
+
+          /*
+           * Collect data.
+           */
+
+          const responses = collectResponses();
+
+          if (!responses) {
+            showMessage(
+              "Please complete all 15 comparisons.",
+
+              true,
+            );
+
+            return;
+          }
+
+          const button = document.getElementById("submitButton");
+
+          button.disabled = true;
+
+          button.textContent = "Saving responses...";
+
+          /*
+           * =====================================================
+           * SEND TO GOOGLE APPS SCRIPT
+           * =====================================================
+           *
+           * Your Code.gs should contain:
+           *
+           * function submitAHP1(data) { ... }
+           *
+           * =====================================================
+           */
+
+          google.script.run
+
+            .withSuccessHandler(function (result) {
+              if (result && result.success) {
+                button.textContent = "AHP Sheet 1 Submitted";
+
+                showMessage(
+                  "AHP Sheet 1 has been successfully recorded.",
+
+                  false,
+                );
+
+                document.getElementById("calculateButton").disabled = true;
+              } else {
+                button.disabled = false;
+
+                button.textContent = "Submit AHP Sheet 1";
+
+                showMessage(
+                  result && result.message
+                    ? result.message
+                    : "Unable to save your responses.",
+
+                  true,
+                );
+              }
+            })
+
+            .withFailureHandler(function (error) {
+              console.error(error);
+
+              button.disabled = false;
+
+              button.textContent = "Submit AHP Sheet 1";
+
+              showMessage(
+                "There was a problem saving your responses. Please try again.",
+
+                true,
+              );
+            })
+
+            .submitAHP1({
+              participantID: participantID,
+
+              responses: responses,
+
+              consistencyRatio: result.crPercent,
+
+              lambdaMax: result.lambdaMax,
+
+              consistencyIndex: result.CI,
+            });
+        },
+      );
+
+      /* =========================================================
+   MESSAGE
+   ========================================================= */
+
+      function showMessage(text, isError) {
+        const message = document.getElementById("message");
+
+        message.textContent = text;
+
+        message.className = "message " + (isError ? "error" : "success");
+      }
+    </script>
+  </body>
+</html>

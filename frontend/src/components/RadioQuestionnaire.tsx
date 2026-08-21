@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { logRadioQuestionnaire } from "../api";
 import { RadioQuestionnairePayload, UserInfo } from "../types";
-
+import type { Step } from "../App";
 interface props {
-  goBack: () => void;
-  goForth: () => void;
+  goBack: (step: Step) => void;
+  goForth: (step: Step) => void;
   user: UserInfo;
 }
 
@@ -40,6 +40,12 @@ export default function RadioQuestionnaire({ goBack, goForth, user }: props) {
       return responses.frustation;
     }
   }
+  function byPass() {
+    goForth("results");
+  }
+  function handleback() {
+    goBack("radio");
+  }
   function handleSubmit(): void {
     if (Object.values(responses).some((value) => value === -1)) {
       setError("Please Complete the Survey");
@@ -47,7 +53,7 @@ export default function RadioQuestionnaire({ goBack, goForth, user }: props) {
     }
     setError("");
     logRadioQuestionnaire({ ...responses, ...user });
-    goForth();
+    goForth("results");
   }
   const questions = [
     {
@@ -132,12 +138,15 @@ export default function RadioQuestionnaire({ goBack, goForth, user }: props) {
 
       {error && <p className="form-error">{error}</p>}
       <div className="btn-row">
-        <button className="btn-ghost" onClick={goBack}>
+        <button className="btn-ghost" onClick={handleback}>
           ← Back
         </button>
 
         <button className="btn-primary" onClick={handleSubmit}>
           Submit
+        </button>
+        <button className="btn-ghost" onClick={byPass}>
+          Next →
         </button>
       </div>
     </div>

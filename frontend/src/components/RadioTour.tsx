@@ -1,8 +1,8 @@
 import type { UIType } from "../types";
-
+import type { Step } from "../App";
 interface Props {
-  goForth: () => void;
-  goBack: () => void;
+  goForth: (step: Step) => void;
+  goBack: (step: Step) => void;
   //   setStep: React.Dispatch<React.SetStateAction<"setup" | "results">>
 }
 
@@ -11,6 +11,12 @@ export default function RadioTour({ goBack, goForth }: Props) {
   // function handleNext(){
   //     onStart("matrix", frnd);
   // }
+  function handleback() {
+    goBack("matrixquestionnaire");
+  }
+  function handleforth() {
+    goForth("radio");
+  }
   return (
     <section className="panel tour-panel">
       <h1>How Radio Comparison Works</h1>
@@ -51,7 +57,8 @@ export default function RadioTour({ goBack, goForth }: Props) {
                 <b>Social, 5</b>
               </td>
               <td>
-                Social criteria is <b>5× more important than the Environment</b>.
+                Social criteria is <b>5× more important than the Environment</b>
+                .
               </td>
             </tr>
 
@@ -85,7 +92,8 @@ export default function RadioTour({ goBack, goForth }: Props) {
                 <b>Economical, 5</b>
               </td>
               <td>
-                Economical criteria is <b>5× more important than the Environmental</b>.
+                Economical criteria is{" "}
+                <b>5× more important than the Environmental</b>.
               </td>
             </tr>
 
@@ -111,10 +119,10 @@ export default function RadioTour({ goBack, goForth }: Props) {
       </div>
 
       <div className="btn-row">
-        <button className="btn-ghost" onClick={() => goBack()}>
+        <button className="btn-ghost" onClick={handleback}>
           ⬅ Back
         </button>
-        <button className="btn-primary" onClick={() => goForth()}>
+        <button className="btn-primary" onClick={handleforth}>
           Start Comparison →
         </button>
       </div>

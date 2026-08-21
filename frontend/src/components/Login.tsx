@@ -1,24 +1,27 @@
 import { FormEvent, useState } from "react";
 import { UserInfo } from "../types";
-
+import type { Step } from "../App";
 interface Props {
   onSubmit: (info: UserInfo) => void;
+  goForth: (step: Step) => void;
 }
 
-export default function Login({ onSubmit }: Props) {
+export default function Login({ onSubmit, goForth }: Props) {
   const [name, setName] = useState("");
-  const [rollno, setRollno] = useState("");
+  const [education, setEducation] = useState("");
   const [age, setAge] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
-
+  function byPass() {
+    goForth("setup");
+  }
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const ageNum = parseInt(age, 10);
 
     if (
       !name.trim() ||
-      !rollno.trim() ||
+      !education.trim() ||
       !age.trim() ||
       Number.isNaN(ageNum) ||
       ageNum <= 0
@@ -26,12 +29,16 @@ export default function Login({ onSubmit }: Props) {
       setError("Name, roll number, and a valid age are all required.");
       return;
     }
+    if (ageNum < 18) {
+      setError("Below 18 are not allowed.");
+      return;
+    }
     if (!agreed) {
       setError("You must accept the terms & conditions to continue.");
       return;
     }
     setError("");
-    onSubmit({ name: name.trim(), rollno: rollno.trim(), age: ageNum });
+    onSubmit({ name: name.trim(), education: education.trim(), age: ageNum });
   }
 
   return (
@@ -40,7 +47,7 @@ export default function Login({ onSubmit }: Props) {
       <p className="lede">
         A few details before you start the comparison. All fields are required.
       </p>
-      
+
       <div className="both">
         <div>
           <form
@@ -60,11 +67,11 @@ export default function Login({ onSubmit }: Props) {
             </label>
 
             <label className="form-field">
-              Roll No.
+              Education Qualification
               <input
-                value={rollno}
-                onChange={(e) => setRollno(e.target.value)}
-                placeholder="e.g. 21CS045"
+                value={education}
+                onChange={(e) => setEducation(e.target.value)}
+                placeholder="e.g. B.Tech"
                 required
               />
             </label>
@@ -72,9 +79,9 @@ export default function Login({ onSubmit }: Props) {
             <label className="form-field">
               Age
               <input
-                type="number"
-                min={1}
-                max={120}
+                // min={1}
+                // max={120}
+                type="text"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="e.g. 21"
@@ -111,6 +118,9 @@ export default function Login({ onSubmit }: Props) {
       <div className="terms-actions">
         <button form="login" type="submit" className="btn-primary">
           Continue
+        </button>
+        <button className="btn-ghost" onClick={byPass}>
+          Next →
         </button>
       </div>
     </section>

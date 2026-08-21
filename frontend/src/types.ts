@@ -11,10 +11,28 @@ export type UIType =
 
 export interface UserInfo {
   name: string;
-  rollno: string;
+  education: string;
   age: number;
 }
+export const compare = [
+  "",
+  "Equally important",
 
+  "Equally to moderately more important",
+  "Moderately more important",
+
+  "Moderately to strongly more important",
+
+  "Strongly more important",
+
+  "Strongly to very strongly more important",
+
+  "Very strongly more important",
+
+  "Very strongly to extremely more important",
+
+  "Extremely more important",
+];
 export interface MatrixEventPayload extends UserInfo {
   clicknumber: number;
   timer: number;

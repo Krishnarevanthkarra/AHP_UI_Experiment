@@ -11,7 +11,7 @@ import RadioQuestionnaire from "./components/RadioQuestionnaire";
 import ThemeToggle from "./components/ThemeToggle";
 import { UIType, UserInfo } from "./types";
 
-type Step =
+export type Step =
   | "login"
   | "setup"
   | "matrix"
@@ -29,21 +29,28 @@ interface FinalResult {
 
 export default function App() {
   const [step, setStep] = useState<Step>("login");
-  const [user, setUser] = useState<UserInfo | null>(null);
-  const [criteria, setCriteria] = useState<string[]>([]);
+  const [user, setUser] = useState<UserInfo>({
+    name: "Krishna",
+    age: 19,
+    education: "B.Tech",
+  });
+  const criteria = ["Social", "Environment", "Economic"];
   const [startTime, setStartTime] = useState<number>(0);
-  const [result, setResult] = useState<FinalResult | null>(null);
+  const [result, setResult] = useState<FinalResult | null>({
+    weights: [1, 2, 3],
+    cr: 0.1,
+  });
 
   function handleLogin(info: UserInfo) {
     setUser(info);
     setStep("setup");
   }
 
-  function handleStart(typ: UIType, crit: string[]) {
-    setCriteria(crit);
-    setStartTime(Date.now()); // timer zero-point — never rendered during input, only used when logging events
-    setStep(typ);
-  }
+  // function handleStart(typ: UIType, crit: string[]) {
+  //   setCriteria(crit);
+  //   setStartTime(Date.now()); // timer zero-point — never rendered during input, only used when logging events
+  //   setStep(typ);
+  // }
 
   function handleFinish(weights: number[], cr: number, ui: UIType) {
     setResult({ weights, cr });
@@ -51,36 +58,19 @@ export default function App() {
   }
 
   function handleRestart() {
-    setUser(null);
+    setUser({
+      name: "Krishna",
+      age: 19,
+      education: "B.Tech",
+    });
     setResult(null);
     setStep("login");
   }
-  function handleTourMatrix() {
-    setStep("matrix");
+  function handleforth(changeStep: Step) {
+    setStep(changeStep);
   }
-
-  function goBack() {
-    setStep("setup");
-  }
-
-  function goForthRadioTour() {
-    setStep("radio");
-  }
-  function goBackFromRadioTour() {
-    setStep("matrixquestionnaire");
-  }
-
-  function goBackMatrixQuestionnaire() {
-    setStep("matrix");
-  }
-  function goForthMatrixQuestinnaire() {
-    setStep("radiotour");
-  }
-  function goBackRadioQuestionnaire() {
-    setStep("radio");
-  }
-  function goForthRadioQuestinnaire() {
-    setStep("results");
+  function handleback(changeStep: Step) {
+    setStep(changeStep);
   }
   const stepIndex = {
     login: 1,
@@ -133,23 +123,14 @@ export default function App() {
         <ThemeToggle />
       </header>
 
-      {step === "login" && <Login onSubmit={handleLogin} />}
+      {step === "login" && (
+        <Login onSubmit={handleLogin} goForth={handleforth} />
+      )}
 
-      {step === "setup" && <Setup onStart={handleStart} />}
+      {step === "setup" && <Setup goBack={handleback} goForth={handleforth} />}
 
       {step === "matrixtour" && (
-        <MatrixTour goBack={goBack} onStart={handleTourMatrix} />
-      )}
-
-      {step === "radiotour" && (
-        <RadioTour goBack={goBackFromRadioTour} goForth={goForthRadioTour} />
-      )}
-      {step === "matrixquestionnaire" && (
-        <MatrixQuestionnaire
-          user={user}
-          goBack={goBackMatrixQuestionnaire}
-          goForth={goForthMatrixQuestinnaire}
-        />
+        <MatrixTour goBack={handleback} goForth={handleforth} />
       )}
 
       {step === "matrix" && user && (
@@ -158,7 +139,20 @@ export default function App() {
           user={user}
           startTime={Date.now()}
           onFinish={handleFinish}
+          goBack={handleback}
+          goForth={handleforth}
         />
+      )}
+      {step === "matrixquestionnaire" && (
+        <MatrixQuestionnaire
+          user={user}
+          goBack={handleback}
+          goForth={handleforth}
+        />
+      )}
+
+      {step === "radiotour" && (
+        <RadioTour goBack={handleback} goForth={handleforth} />
       )}
 
       {step === "radio" && user && (
@@ -167,13 +161,15 @@ export default function App() {
           user={user}
           startTime={Date.now()}
           onFinish={handleFinish}
+          goBack={handleback}
+          goForth={handleforth}
         />
       )}
       {step === "radioquestionnaire" && (
         <RadioQuestionnaire
           user={user}
-          goBack={goBackRadioQuestionnaire}
-          goForth={goForthRadioQuestinnaire}
+          goBack={handleback}
+          goForth={handleforth}
         />
       )}
       {step === "results" && result && (

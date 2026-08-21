@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { logMatrixQuestionnaire } from "../api";
 import { MatrixQuestionnairePayload, UserInfo } from "../types";
-
+import type { Step } from "../App";
 interface props {
-  goBack: () => void;
-  goForth: () => void;
+  goBack: (step: Step) => void;
+  goForth: (step: Step) => void;
   user: UserInfo;
 }
 
@@ -40,14 +40,20 @@ export default function MatrixQuestionnaire({ goBack, goForth, user }: props) {
       return responses.frustation;
     }
   }
-  function handleSubmit(): void {
+  function handleforth(): void {
     if (Object.values(responses).some((value) => value === -1)) {
       setError("Please Complete the Survey");
       return;
     }
     setError("");
     logMatrixQuestionnaire({ ...responses, ...user });
-    goForth();
+    goForth("radiotour");
+  }
+  function byPass() {
+    goForth("radiotour");
+  }
+  function handleback() {
+    goBack("matrix");
   }
   const questions = [
     {
@@ -132,12 +138,15 @@ export default function MatrixQuestionnaire({ goBack, goForth, user }: props) {
 
       {error && <p className="form-error">{error}</p>}
       <div className="btn-row">
-        <button className="btn-ghost" onClick={goBack}>
+        <button className="btn-ghost" onClick={handleback}>
           ← Back
         </button>
 
-        <button className="btn-primary" onClick={handleSubmit}>
+        <button className="btn-primary" onClick={handleforth}>
           Submit
+        </button>
+        <button className="btn-ghost" onClick={byPass}>
+          Next →
         </button>
       </div>
     </div>

@@ -2,12 +2,41 @@ import { useMemo, useRef, useState } from "react";
 import { buildScale, computeAHP, matrixFromUpper } from "../ahp";
 import { logMatrixEvent } from "../api";
 import { UIType, UserInfo } from "../types";
+import type { Step } from "../App";
+import { compare } from "../types";
+
+import { useEffect } from "react";
+
+interface props {
+  text: string;
+  status: "good" | "bad";
+}
+
+function FloatingHint({ text, status }: props) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!text) return;
+
+    setVisible(true);
+
+    const timer = setTimeout(() => setVisible(false), 10000);
+
+    return () => clearTimeout(timer);
+  }, [text]);
+
+  if (!visible) return null;
+
+  return <div className={`floating-hint ${status}`}>{text}</div>;
+}
 
 interface Props {
   criteria: string[];
   user: UserInfo;
   startTime: number; // ms timestamp captured when the user pressed Start — not shown, only used to compute `timer`
   onFinish: (weights: number[], cr: number, ui: UIType) => void;
+  goBack(step: Step): void;
+  goForth(step: Step): void;
 }
 
 const SCALE = buildScale();
@@ -17,7 +46,10 @@ export default function MatrixUI({
   user,
   startTime,
   onFinish,
+  goBack,
+  goForth,
 }: Props) {
+  const [hintText, setHintText] = useState("");
   const n = criteria.length;
   const [upper, setUpper] = useState<number[][]>(() =>
     Array.from({ length: n }, () => Array(n).fill(1)),
@@ -42,32 +74,43 @@ export default function MatrixUI({
     clickCount.current += 1;
 
     const result = computeAHP(matrixFromUpper(n, nextUpper));
+    if (user !== null)
+      logMatrixEvent({
+        ...user,
+        clicknumber: clickCount.current,
+        timer: Number(elapsed().toFixed(3)),
+        cr: Number(result.CR.toFixed(6)),
+        option: `${criteria[i]}-${criteria[j]}`,
+        value,
+        option_vote_count: voteCounts.current[key],
+      });
 
-    logMatrixEvent({
-      ...user,
-      clicknumber: clickCount.current,
-      timer: Number(elapsed().toFixed(3)),
-      cr: Number(result.CR.toFixed(6)),
-      option: `${criteria[i]}-${criteria[j]}`,
-      value,
-      option_vote_count: voteCounts.current[key],
-    });
+    const asorthan = value == 1 ? "as" : "than";
+    if (value >= 1) {
+      setHintText(
+        `${criteria[i]} is ${compare[value]} ${asorthan} ${criteria[j]}`,
+      );
+    } else {
+      setHintText(
+        `${criteria[j]} is ${compare[Math.round(1 / value)]} than ${criteria[i]}`,
+      );
+    }
   }
 
   function handleReset() {
     setUpper(Array.from({ length: n }, () => Array(n).fill(1)));
     voteCounts.current.reset = (voteCounts.current.reset || 0) + 1;
     clickCount.current += 1;
-
-    logMatrixEvent({
-      ...user,
-      clicknumber: clickCount.current,
-      timer: Number(elapsed().toFixed(3)),
-      cr: 0,
-      option: "reset",
-      value: 1,
-      option_vote_count: voteCounts.current.reset,
-    });
+    if (user !== null)
+      logMatrixEvent({
+        ...user,
+        clicknumber: clickCount.current,
+        timer: Number(elapsed().toFixed(3)),
+        cr: 0,
+        option: "reset",
+        value: 1,
+        option_vote_count: voteCounts.current.reset,
+      });
   }
 
   const crClass = CR < 0.1 ? "good" : "bad";
@@ -76,15 +119,23 @@ export default function MatrixUI({
   const dashOffset = circumference * (1 - pct);
   const strokeVar = crClass === "good" ? "var(--good)" : "var(--bad)";
 
+  function handleback() {
+    goBack("matrixtour");
+  }
+  function handleforth() {
+    goForth("matrixquestionnaire");
+  }
   return (
     <section className="panel">
       <h1>Category Comparison</h1>
-      <p className="lede">
+      {/* <p className="lede">
         Establish relative priorities between criteria using a 1&ndash;9 scale
         (or its reciprocal). Higher values favor the row over the column.
-      </p>
-
+      </p> */}
+      <h3 className="fineprint">CR Ratio</h3>
       <div className="gauge-card">
+        {/* <FloatingHint text={hintText} /> */}
+
         <div className="gauge">
           <svg viewBox="0 0 120 120">
             <circle className="gauge-track" cx={60} cy={60} r={52} />
@@ -105,7 +156,9 @@ export default function MatrixUI({
           {CR < 0.1 ? "Acceptable (< 0.10)" : "Inconsistent — revise judgments"}
         </div>
       </div>
-
+      <div className="matrix-hint">
+        <FloatingHint text={hintText} status={crClass} />
+      </div>
       <div className="table-wrap">
         <table>
           <thead>
@@ -170,16 +223,13 @@ export default function MatrixUI({
         <button className="btn-ghost" onClick={handleReset}>
           Reset Matrix
         </button>
-        <button
-          className="btn-ghost"
-          onClick={() => onFinish(weights, CR, "matrixtour")}
-        >
+        <button className="btn-ghost" onClick={handleback}>
           ⬅ Back
         </button>
         <button
           className="btn-primary"
           disabled={CR >= 0.1}
-          onClick={() => onFinish(weights, CR, "matrixquestionnaire")}
+          onClick={handleforth}
         >
           Next
         </button>

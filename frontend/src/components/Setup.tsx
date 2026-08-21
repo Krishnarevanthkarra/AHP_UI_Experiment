@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { UIType } from "../types";
-interface Props {
-  onStart: (uiType: UIType, criteria: string[]) => void;
-}
+import type { Step } from "../App";
 
+interface Props {
+  goBack(step: Step): void;
+  goForth(step: Step): void;
+}
 const DEFAULTS = [
   "Social",
   "Environmental",
@@ -15,7 +17,7 @@ const DEFAULTS = [
   "Cost",
 ];
 
-export default function Setup({ onStart }: Props) {
+export default function Setup({ goBack, goForth }: Props) {
   const [uiType, setUiType] = useState<UIType>("matrix");
   const [count, setCount] = useState(3);
   const [names, setNames] = useState<string[]>(DEFAULTS.slice(0, 3));
@@ -35,18 +37,16 @@ export default function Setup({ onStart }: Props) {
     setNames((prev) => prev.map((n, idx) => (idx === i ? value : n)));
   }
 
-  function handleStart() {
-    const finalNames: string[] = names.map((n, i) => n.trim() || `Criterion ${i + 1}`);
-    onStart("matrixtour", finalNames);
+  function handleback() {
+    goBack("login");
   }
-  function handleBack() {
-    const finalNames = names.map((n, i) => n.trim() || `Criterion ${i + 1}`);
-    onStart("login", finalNames);
+  function handleforth() {
+    goForth("matrixtour");
   }
 
   return (
     <section className="panel">
-      <h1>Set up your comparison</h1>
+      <h1>Introduction</h1>
       <p className="lede">
         List the criteria you're weighing against each other.
       </p>
@@ -76,8 +76,8 @@ export default function Setup({ onStart }: Props) {
         </button>
       </div> */}
 
-      <div className="field-row">
-        <label htmlFor="crit-count">Number of criteria</label>
+      {/* <div className="field-row"> */}
+      {/* <label htmlFor="crit-count">Number of criteria</label>
         <input
           id="crit-count"
           type="number"
@@ -86,7 +86,7 @@ export default function Setup({ onStart }: Props) {
           value={count}
           onChange={(e) => updateCount(parseInt(e.target.value, 10))}
         />
-      </div>
+      </div> */}
 
       <div className="crit-names">
         {names.map((n, i) => (
@@ -95,16 +95,44 @@ export default function Setup({ onStart }: Props) {
             value={n}
             placeholder={`Criterion ${i + 1}`}
             onChange={(e) => updateName(i, e.target.value)}
+            disabled={true}
           />
         ))}
       </div>
-
+      <p>
+        In this you are going to weigh the above criterion based on your own
+        priority.
+      </p>
+      <h3>What is CR ratio?</h3>
+      <div className="lede">
+        <p>
+          The Consistency Ratio (CR) is a measure used in the Analytic Hierarchy
+          Process (AHP) to check whether the pairwise comparisons made by a
+          decision-maker are logically consistent.
+        </p>
+        <ul>
+          <li>A low CR means the judgments are consistent and reliable.</li>
+          <li>
+            A high CR means the judgments may be inconsistent and should be
+            revised.
+          </li>
+        </ul>
+      </div>
+      <h3>Classification</h3>
+      <ul>
+        <li style={{ color: "green", marginBottom: "10px" }}>
+          CR &lt; 0.10 (Green) → Good consistency{" "}
+        </li>
+        <li style={{ color: "red" }}>
+          CR &gt;= 0.10 (Red) → Poor consistency{" "}
+        </li>
+      </ul>
       <div className="btn-row">
-        <button className="btn-ghost" onClick={handleBack}>
+        <button className="btn-ghost" onClick={handleback}>
           ⬅ Back
         </button>
-        <button className="btn-primary" onClick={handleStart}>
-          Start
+        <button className="btn-primary" onClick={handleforth}>
+          Next
         </button>
       </div>
     </section>

@@ -2,12 +2,15 @@ import { useMemo, useRef, useState } from "react";
 import { computeAHP, matrixFromUpper } from "../ahp";
 import { logRadioEvent } from "../api";
 import { UIType, UserInfo } from "../types";
+import type { Step } from "../App";
 
 interface Props {
   criteria: string[];
   user: UserInfo;
   startTime: number; // ms timestamp captured when the user pressed Start — not shown, only used to compute `timer`
   onFinish: (weights: number[], cr: number, ui: UIType) => void;
+  goBack(step: Step): void;
+  goForth(step: Step): void;
 }
 
 type Winner = "i" | "j" | null;
@@ -37,7 +40,15 @@ export default function RadioUI({
   user,
   startTime,
   onFinish,
+  goBack,
+  goForth,
 }: Props) {
+  function handleback() {
+    goBack("radiotour");
+  }
+  function handleforth() {
+    goForth("radioquestionnaire");
+  }
   const n = criteria.length;
   const [winners, setWinners] = useState<Winner[][]>(() =>
     Array.from({ length: n }, () => Array(n).fill(null)),
@@ -219,16 +230,13 @@ export default function RadioUI({
         <button className="btn-ghost" onClick={handleReset}>
           Reset Matrix
         </button>
-        <button
-          className="btn-ghost"
-          onClick={() => onFinish(weights, CR, "radiotour")}
-        >
+        <button className="btn-ghost" onClick={handleback}>
           ⬅ Back
         </button>
         <button
           className="btn-primary"
           disabled={CR >= 0.1}
-          onClick={() => onFinish(weights, CR, "radioquestionnaire")}
+          onClick={handleforth}
         >
           Next
         </button>
