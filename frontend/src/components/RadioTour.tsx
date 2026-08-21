@@ -27,7 +27,7 @@ export default function RadioTour({ goBack, goForth }: Props) {
       </p>
 
       <div className="video-wrapper">
-        <img src="src/assets/Radio.png" />
+        <img src="/Radio.png" />
       </div>
 
       <div className="tour-info">

@@ -26,7 +26,7 @@ export default function MatrixTour({ goBack, goForth }: Props) {
       </p>
 
       <div className="video-wrapper">
-        <img src="src/assets/Matrix.png" />
+        <img src="/Matrix.png" />
       </div>
 
       <div className="tour-info">
@@ -105,8 +105,6 @@ export default function MatrixTour({ goBack, goForth }: Props) {
               </td>
             </tr> */}
 
-            
-
             {/* <tr>
               <td>
                 <b>1/9</b>
@@ -118,20 +116,24 @@ export default function MatrixTour({ goBack, goForth }: Props) {
           </tbody>
         </table>
         <br></br>
-        <h3><b>Priority Counts are as Follows</b></h3>
+        <h3>
+          <b>Priority Counts are as Follows</b>
+        </h3>
 
-       <p className="fineprint">
-          
-            <p>1 : Equally preferred</p>
-            <p>3 : Moderately preferred</p>
-            <p>5 : Strongly preferred</p>
-            <p>7 : Very strongly preferred</p>
-            <p>9 : Extremely preferred</p>
-          </p>
+        <p className="fineprint">
+          <p>1 : Equally preferred</p>
+          <p>3 : Moderately preferred</p>
+          <p>5 : Strongly preferred</p>
+          <p>7 : Very strongly preferred</p>
+          <p>9 : Extremely preferred</p>
+        </p>
       </div>
       <div>
         <h3>Note:</h3>
-        <p style={{lineHeight: 2}} className="fineprint">When the cell value is a fraction the priority works otherway (i.e) Column to Row. Read the table example above for more clarification.</p>
+        <p style={{ lineHeight: 2 }} className="fineprint">
+          When the cell value is a fraction the priority works otherway (i.e)
+          Column to Row. Read the table example above for more clarification.
+        </p>
       </div>
 
       <div className="btn-row">
