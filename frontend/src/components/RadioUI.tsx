@@ -16,6 +16,22 @@ interface Props {
 
 type Winner = "i" | "j" | null;
 
+interface RadioSuggestion {
+  i: number;
+  j: number;
+
+  currentWinner: Winner;
+  currentValue: number | null;
+
+  suggestedWinner: Winner;
+  suggestedValue: number;
+
+  currentCR: number;
+  suggestedCR: number;
+
+  improvement: number;
+}
+
 function upperFrom(
   winners: Winner[][],
   values: (number | null)[][],
@@ -26,6 +42,7 @@ function upperFrom(
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       const winner = winners[i][j];
+
       const value = values[i][j];
 
       if (!winner || value === null) {
@@ -33,14 +50,6 @@ function upperFrom(
         continue;
       }
 
-      /*
-       * If i wins:
-       *     i is `value` times more important than j
-       *
-       * If j wins:
-       *     j is `value` times more important than i
-       *     therefore i/j = 1/value
-       */
       u[i][j] = winner === "i" ? value : 1 / value;
     }
   }
@@ -75,7 +84,10 @@ export default function RadioUI({
 
   const [showRealCR, setShowRealCR] = useState(false);
 
+  const [suggestions, setSuggestions] = useState<RadioSuggestion[]>([]);
+
   const clickCount = useRef(0);
+
   const voteCounts = useRef<Record<string, number>>({});
 
   /*
@@ -94,22 +106,27 @@ export default function RadioUI({
   const { CR } = useMemo(() => computeAHP(matrix), [matrix]);
 
   /*
-   * The real CR is always calculated.
-   *
-   * But it is hidden until the user presses
-   * "Calculate CR".
+   * ---------------------------------------------------------
+   * CR DISPLAY
+   * ---------------------------------------------------------
    */
-  const effectiveCR = showRealCR ? CR : 0;
 
-  const crClass = effectiveCR < 0.1 ? "good" : "bad";
+  const crStatus = !showRealCR ? "pending" : CR < 0.1 ? "good" : "bad";
+
+  const effectiveCR = showRealCR ? CR : null;
 
   const circumference = 326.7;
 
-  const pct = Math.min(effectiveCR / 0.3, 1);
+  const pct = effectiveCR === null ? 0 : Math.min(effectiveCR / 0.3, 1);
 
   const dashOffset = circumference * (1 - pct);
 
-  const strokeVar = crClass === "good" ? "var(--good)" : "var(--bad)";
+  const strokeVar =
+    crStatus === "good"
+      ? "var(--good)"
+      : crStatus === "bad"
+        ? "var(--bad)"
+        : "var(--warn)";
 
   /*
    * ---------------------------------------------------------
@@ -159,22 +176,117 @@ export default function RadioUI({
 
     const loserName = winner === "i" ? criteria[j] : criteria[i];
 
-    /*
-     * compare[value] describes how much MORE IMPORTANT
-     * the selected winner is.
-     *
-     * Example:
-     * winner = "i"
-     * value = 5
-     *
-     * Social is Strongly more important than Environment.
-     */
     const priority = compare[value] || "more important";
-    const isorthan = value == 1 ? "as" : "than";
+
+    const isorthan = value === 1 ? "as" : "than";
 
     const newAction = `${winnerName} is ${priority} ${isorthan} ${loserName}.`;
 
     setAction(newAction);
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * FIND TOP 3 RADIO SUGGESTIONS
+   * ---------------------------------------------------------
+   *
+   * For each existing pair:
+   *
+   *   winner = i / j
+   *   intensity = 1 ... 9
+   *
+   * Try all possible combinations and retain the
+   * combination producing the largest CR reduction.
+   */
+
+  function calculateRadioSuggestions(
+    currentWinners: Winner[][],
+    currentValues: (number | null)[][],
+    currentCR: number,
+  ): RadioSuggestion[] {
+    const found: RadioSuggestion[] = [];
+
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const currentWinner = currentWinners[i][j];
+
+        const currentValue = currentValues[i][j];
+
+        /*
+         * Only suggest changes for a completed pair.
+         */
+        if (!currentWinner || currentValue === null) {
+          continue;
+        }
+
+        let bestWinner: Winner = currentWinner;
+
+        let bestValue = currentValue;
+
+        let bestCR = currentCR;
+
+        const possibleWinners: Winner[] = ["i", "j"];
+
+        for (const winner of possibleWinners) {
+          for (let value = 1; value <= 9; value++) {
+            if (winner === currentWinner && value === currentValue) {
+              continue;
+            }
+
+            const candidateWinners = currentWinners.map((row) =>
+              row.slice(),
+            ) as Winner[][];
+
+            const candidateValues = currentValues.map((row) => row.slice());
+
+            candidateWinners[i][j] = winner;
+
+            candidateValues[i][j] = value;
+
+            const candidateUpper = upperFrom(
+              candidateWinners,
+              candidateValues,
+              n,
+            );
+
+            const candidateMatrix = matrixFromUpper(n, candidateUpper);
+
+            const result = computeAHP(candidateMatrix);
+
+            if (Number.isFinite(result.CR) && result.CR < bestCR) {
+              bestCR = result.CR;
+
+              bestWinner = winner;
+
+              bestValue = value;
+            }
+          }
+        }
+
+        const improvement = currentCR - bestCR;
+
+        if (
+          improvement > 0 &&
+          (bestWinner !== currentWinner || bestValue !== currentValue)
+        ) {
+          found.push({
+            i,
+            j,
+            currentWinner,
+            currentValue,
+            suggestedWinner: bestWinner,
+            suggestedValue: bestValue,
+            currentCR,
+            suggestedCR: bestCR,
+            improvement,
+          });
+        }
+      }
+    }
+
+    found.sort((a, b) => b.improvement - a.improvement);
+
+    return found.slice(0, 2);
   }
 
   /*
@@ -189,10 +301,10 @@ export default function RadioUI({
     winner: Exclude<Winner, null>,
   ) {
     /*
-     * Any new user interaction means that the old
-     * displayed CR should disappear.
+     * New interaction invalidates old CR suggestions.
      */
     setShowRealCR(false);
+    setSuggestions([]);
 
     const nextWinners = winners.map((row) => row.slice()) as Winner[][];
 
@@ -200,10 +312,6 @@ export default function RadioUI({
 
     setWinners(nextWinners);
 
-    /*
-     * If a value was already selected, immediately
-     * update the action to reflect the new winner.
-     */
     const currentValue = values[i][j];
 
     if (currentValue !== null) {
@@ -213,6 +321,7 @@ export default function RadioUI({
     /*
      * Logging
      */
+
     const key = `${i}-${j}-winner`;
 
     voteCounts.current[key] = (voteCounts.current[key] || 0) + 1;
@@ -242,9 +351,11 @@ export default function RadioUI({
 
   function handleValueChange(i: number, j: number, value: number) {
     /*
-     * Hide previously calculated CR.
+     * New interaction invalidates old CR suggestions.
      */
+
     setShowRealCR(false);
+    setSuggestions([]);
 
     const nextValues = values.map((row) => row.slice());
 
@@ -252,9 +363,6 @@ export default function RadioUI({
 
     setValues(nextValues);
 
-    /*
-     * Update action using the CURRENT winner.
-     */
     const winner = winners[i][j];
 
     if (winner) {
@@ -262,8 +370,9 @@ export default function RadioUI({
     }
 
     /*
-     * Count this pair as filled.
+     * Count pair as filled.
      */
+
     const nextCount = count.map((row) => row.slice());
 
     nextCount[i][j] += 1;
@@ -275,6 +384,7 @@ export default function RadioUI({
     /*
      * Logging
      */
+
     const key = `${i}-${j}-value`;
 
     voteCounts.current[key] = (voteCounts.current[key] || 0) + 1;
@@ -298,15 +408,20 @@ export default function RadioUI({
 
   /*
    * ---------------------------------------------------------
-   * CALCULATE CR BUTTON
+   * CALCULATE CR
    * ---------------------------------------------------------
    */
 
   function handleCalculateCR() {
-    /*
-     * Show the REAL AHP calculated CR.
-     */
     setShowRealCR(true);
+
+    if (CR >= 0.1) {
+      const nextSuggestions = calculateRadioSuggestions(winners, values, CR);
+
+      setSuggestions(nextSuggestions);
+    } else {
+      setSuggestions([]);
+    }
   }
 
   /*
@@ -323,9 +438,8 @@ export default function RadioUI({
     setCount(Array.from({ length: n }, () => Array(n).fill(0)));
 
     setShowRealCR(false);
-
+    setSuggestions([]);
     setAction("Reset — start your comparisons from the beginning.");
-
     setAllFilled(false);
 
     voteCounts.current.reset = (voteCounts.current.reset || 0) + 1;
@@ -407,109 +521,148 @@ export default function RadioUI({
               />
             </svg>
 
-            <div className="gauge-value">
-              <span>{effectiveCR.toFixed(4)}</span>
+            <div className={`gauge-value ${crStatus}`}>
+              <span>{effectiveCR === null ? "—" : effectiveCR.toFixed(4)}</span>
 
               <span className="gauge-label">CR</span>
             </div>
           </div>
 
-          <div className={`gauge-status ${crClass === "good" ? "" : crClass}`}>
-            {effectiveCR < 0.1
-              ? "Acceptable (< 0.10)"
-              : "Inconsistent — revise judgments"}
+          <div className={`gauge-status ${crStatus}`}>
+            {crStatus === "pending"
+              ? "Calculate CR"
+              : crStatus === "good"
+                ? "Acceptable (< 0.10)"
+                : "Inconsistent — revise judgments"}
           </div>
         </div>
 
-        <button
-          className="btn-primary"
-          onClick={handleCalculateCR}
-          // disabled={!allfilled}
-        >
+        <button className="btn-primary" onClick={handleCalculateCR}>
           Calculate CR
         </button>
       </div>
 
       <div className="action">
-        <h3 className={crClass}>Action Performed:</h3>
+        <h3 className={crStatus}>Action Performed:</h3>
 
         <p>{action}</p>
       </div>
-      <br></br>
+
+      <br />
+
       <div id="radio-table">
         {pairs.map(([i, j]) => {
           const winner = winners[i][j];
+
           const value = values[i][j];
+
+          const suggestion = suggestions.find((s) => s.i === i && s.j === j);
 
           return (
             <div className="radio-row" key={`${i}-${j}`}>
               <div className="radio-row-heading">
                 <b>{criteria[i]}</b>
+
                 {" vs "}
+
                 <b>{criteria[j]}</b>
+
                 {" — which matters more, and how much?"}
               </div>
 
               <div className="radio-line">
                 <div className="radio-group">
-                  {(["i", "j"] as const).map((opt) => (
-                    <label
-                      key={opt}
-                      className={`radio-opt ${
-                        winner === opt ? "selected" : ""
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name={`w-${i}-${j}`}
-                        checked={winner === opt}
-                        onChange={() => handleWinnerChange(i, j, opt)}
-                      />
+                  {(["i", "j"] as const).map((opt) => {
+                    const isSuggestedWinner =
+                      suggestion && suggestion.suggestedWinner === opt;
 
-                      {opt === "i" ? criteria[i] : criteria[j]}
-                    </label>
-                  ))}
+                    return (
+                      <label
+                        key={opt}
+                        className={`radio-opt ${
+                          winner === opt ? "selected" : ""
+                        } ${isSuggestedWinner ? "suggestion-radio" : ""}`}
+                      >
+                        <input
+                          type="radio"
+                          name={`w-${i}-${j}`}
+                          checked={winner === opt}
+                          onChange={() => handleWinnerChange(i, j, opt)}
+                        />
+
+                        {opt === "i" ? criteria[i] : criteria[j]}
+                      </label>
+                    );
+                  })}
                 </div>
 
                 <div className="divider" />
 
                 <div className="radio-group value-group">
-                  {Array.from({ length: 9 }, (_, idx) => idx + 1).map((v) => (
-                    <label
-                      key={v}
-                      className={`radio-opt ${!winner ? "disabled" : ""} ${
-                        value === v ? "selected" : ""
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name={`v-${i}-${j}`}
-                        disabled={!winner}
-                        checked={value === v}
-                        onChange={() => handleValueChange(i, j, v)}
-                      />
+                  {Array.from(
+                    {
+                      length: 9,
+                    },
+                    (_, idx) => idx + 1,
+                  ).map((v) => {
+                    const isSuggestedValue =
+                      suggestion && suggestion.suggestedValue === v;
 
-                      {v}
-                    </label>
-                  ))}
+                    return (
+                      <label
+                        key={v}
+                        className={`radio-opt ${!winner ? "disabled" : ""} ${
+                          value === v ? "selected" : ""
+                        } ${isSuggestedValue ? "suggestion-radio" : ""}`}
+                      >
+                        <input
+                          type="radio"
+                          name={`v-${i}-${j}`}
+                          disabled={!winner}
+                          checked={value === v}
+                          onChange={() => handleValueChange(i, j, v)}
+                        />
+
+                        {v}
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
+
+              {suggestion && (
+                <div className="suggestion-note">
+                  Try{" "}
+                  <b>
+                    {suggestion.suggestedWinner === "i"
+                      ? criteria[i]
+                      : criteria[j]}
+                  </b>{" "}
+                  at <b>{suggestion.suggestedValue}</b>
+                  {/* <span>
+                    {" "}
+                    — estimated CR: {suggestion.suggestedCR.toFixed(4)}
+                  </span> */}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-      <br></br>
+
+      <br />
+
       <h3>
         <b>Priority Counts are as Follows</b>
       </h3>
 
-      <p className="fineprint">
+      <div className="fineprint">
         <p>1 : Equally preferred</p>
         <p>3 : Moderately preferred</p>
         <p>5 : Strongly preferred</p>
         <p>7 : Very strongly preferred</p>
         <p>9 : Extremely preferred</p>
-      </p>
+      </div>
 
       <div className="btn-row">
         <button className="btn-ghost" onClick={handleReset}>
@@ -523,13 +676,6 @@ export default function RadioUI({
         <button
           className="btn-primary"
           disabled={!(CR < 0.1 && allfilled)}
-          onClick={handleforth}
-        >
-          Next
-        </button>
-        <button
-          className="btn-primary"
-          // disabled={!(CR < 0.1 && allfilled)}
           onClick={handleforth}
         >
           Next
