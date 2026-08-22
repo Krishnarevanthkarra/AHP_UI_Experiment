@@ -541,6 +541,13 @@ export default function MatrixUI({
         >
           Next
         </button>
+        <button
+          className="btn-primary"
+          // disabled={!(CR < 0.1 && allfilled)}
+          onClick={handleforth}
+        >
+          Next
+        </button>
       </div>
     </section>
   );
