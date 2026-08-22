@@ -1,0 +1,1997 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Recovery AHP</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+
+        width: 100%;
+        min-height: 100%;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        background: #ffffff;
+
+        color: #222222;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      /* =====================================================
+       HEADER
+       ===================================================== */
+
+      .header {
+        width: 100%;
+
+        border-bottom: 1px solid #d5d5d5;
+
+        background: #ffffff;
+
+        padding: 9px 15px;
+      }
+
+      .header-inner {
+        max-width: 1100px;
+
+        margin: auto;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+      }
+
+      .study-title {
+        font-size: 15px;
+
+        font-weight: 700;
+      }
+
+      .participant-id {
+        font-size: 11px;
+
+        color: #666666;
+      }
+
+      /* =====================================================
+       MAIN
+       ===================================================== */
+
+      .container {
+        max-width: 1100px;
+
+        margin: 0 auto;
+
+        padding: 12px 10px 30px;
+      }
+
+      .question-title {
+        font-size: 15px;
+
+        font-weight: 700;
+
+        margin-bottom: 7px;
+      }
+
+      .instruction {
+        font-size: 11px;
+
+        line-height: 1.45;
+
+        margin-bottom: 9px;
+
+        color: #444444;
+      }
+
+      .scale-description {
+        background: #f5f5f5;
+
+        border: 1px solid #dddddd;
+
+        padding: 6px 8px;
+
+        font-size: 10px;
+
+        line-height: 1.4;
+
+        margin-bottom: 9px;
+      }
+
+      /* =====================================================
+       PROGRESS
+       ===================================================== */
+
+      .progress-container {
+        margin-bottom: 8px;
+
+        font-size: 10px;
+
+        color: #666666;
+      }
+
+      .progress-top {
+        display: flex;
+
+        justify-content: space-between;
+
+        margin-bottom: 3px;
+      }
+
+      .progress-bar {
+        width: 100%;
+
+        height: 4px;
+
+        background: #e5e5e5;
+      }
+
+      .progress-fill {
+        height: 100%;
+
+        width: 0%;
+
+        background: #333333;
+
+        transition: width 0.2s ease;
+      }
+
+      /* =====================================================
+       TABLE
+       ===================================================== */
+
+      .table-wrapper {
+        width: 100%;
+
+        overflow-x: auto;
+
+        border: 1px solid #d1d1d1;
+      }
+
+      .ahp-table {
+        width: 100%;
+
+        min-width: 900px;
+
+        border-collapse: collapse;
+
+        table-layout: fixed;
+
+        font-size: 11px;
+      }
+
+      .ahp-table th {
+        background: #f1f1f1;
+
+        border: 1px solid #d2d2d2;
+
+        padding: 5px 4px;
+
+        text-align: center;
+
+        font-weight: 600;
+
+        vertical-align: middle;
+      }
+
+      .ahp-table td {
+        border: 1px solid #d2d2d2;
+
+        padding: 3px 5px;
+
+        vertical-align: middle;
+      }
+
+      .ahp-table tbody tr:nth-child(even) {
+        background: #f7f9fa;
+      }
+
+      .number-column {
+        width: 34px;
+
+        text-align: center;
+      }
+
+      .criterion-a {
+        width: 29%;
+      }
+
+      .criterion-b {
+        width: 31%;
+      }
+
+      .scale-column {
+        width: 33%;
+
+        text-align: center;
+      }
+
+      /* =====================================================
+       A / B OPTIONS
+       ===================================================== */
+
+      .criterion-option {
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 4px;
+
+        cursor: pointer;
+
+        line-height: 1.25;
+      }
+
+      .criterion-option input {
+        margin: 1px 0 0;
+
+        flex-shrink: 0;
+
+        cursor: pointer;
+      }
+
+      /* =====================================================
+       SCALE
+       ===================================================== */
+
+      .scale-options {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 3px;
+
+        white-space: nowrap;
+      }
+
+      .scale-item {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 1px;
+
+        cursor: pointer;
+
+        border-radius: 3px;
+
+        padding: 2px;
+      }
+
+      .scale-item input {
+        margin: 0;
+
+        cursor: pointer;
+      }
+
+      .scale-number {
+        font-size: 10px;
+
+        cursor: pointer;
+      }
+
+      /* =====================================================
+       SUGGESTED VALUE
+       ===================================================== */
+
+      .scale-item.suggested {
+        background: #c8efc8;
+
+        outline: 1px solid #4ca64c;
+
+        padding: 2px 4px;
+      }
+
+      .suggested-star {
+        color: #16803c;
+
+        font-size: 9px;
+
+        font-weight: bold;
+
+        display: none;
+
+        margin-left: 2px;
+      }
+
+      .scale-item.suggested .suggested-star {
+        display: inline;
+      }
+
+      /* =====================================================
+       CR
+       ===================================================== */
+
+      .cr-section {
+        border: 1px solid #d2d2d2;
+
+        border-top: none;
+
+        padding: 6px 8px;
+
+        background: #f7f9fa;
+
+        font-size: 11px;
+
+        min-height: 27px;
+      }
+
+      .cr-value {
+        font-weight: 700;
+      }
+
+      .cr-good {
+        color: #16803c;
+      }
+
+      .cr-bad {
+        color: #c5221f;
+      }
+
+      /* =====================================================
+       BUTTONS
+       ===================================================== */
+
+      .button-row {
+        margin-top: 8px;
+
+        display: flex;
+
+        gap: 6px;
+
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: 1px solid #888888;
+
+        background: #eeeeee;
+
+        color: #222222;
+
+        padding: 5px 11px;
+
+        border-radius: 3px;
+
+        font-size: 11px;
+
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #e1e1e1;
+      }
+
+      button:disabled {
+        opacity: 0.55;
+
+        cursor: not-allowed;
+      }
+
+      .apply-button {
+        background: #e7f5e7;
+
+        border-color: #6aaa6a;
+      }
+
+      .continue-button {
+        background: #222222;
+
+        color: #ffffff;
+
+        border-color: #222222;
+      }
+
+      .continue-button:hover {
+        background: #000000;
+      }
+
+      /* =====================================================
+       ERROR
+       ===================================================== */
+
+      .error {
+        display: none;
+
+        margin-top: 8px;
+
+        padding: 7px 9px;
+
+        background: #fff1f1;
+
+        border: 1px solid #efcaca;
+
+        color: #a00000;
+
+        font-size: 10px;
+
+        border-radius: 3px;
+      }
+
+      /* =====================================================
+       SUGGESTION BOX
+       ===================================================== */
+
+      .suggestion-box {
+        display: none;
+
+        margin-top: 10px;
+
+        padding: 10px;
+
+        background: #fffbea;
+
+        border: 1px solid #e2d28a;
+
+        font-size: 11px;
+
+        line-height: 1.45;
+      }
+
+      .suggestion-title {
+        font-weight: 700;
+
+        font-size: 12px;
+
+        margin-bottom: 5px;
+      }
+
+      .suggestion-explanation {
+        color: #444444;
+
+        margin-bottom: 7px;
+      }
+
+      .suggestion-list {
+        margin: 6px 0 8px;
+
+        padding-left: 20px;
+      }
+
+      .suggestion-list li {
+        margin-bottom: 4px;
+      }
+
+      .suggestion-cr {
+        font-weight: 700;
+
+        margin-top: 5px;
+      }
+
+      .suggestion-note {
+        font-size: 9px;
+
+        color: #666666;
+
+        margin-top: 7px;
+      }
+
+      /* =====================================================
+       RESULT
+       ===================================================== */
+
+      .result {
+        display: none;
+
+        margin-top: 10px;
+
+        border: 1px solid #d2d2d2;
+
+        padding: 10px;
+
+        background: #ffffff;
+      }
+
+      .result-title {
+        font-size: 14px;
+
+        font-weight: 700;
+
+        margin-bottom: 8px;
+      }
+
+      .result-grid {
+        display: grid;
+
+        grid-template-columns: repeat(6, 1fr);
+
+        gap: 5px;
+
+        margin-bottom: 9px;
+      }
+
+      .weight-box {
+        background: #f5f5f5;
+
+        border: 1px solid #dddddd;
+
+        padding: 6px 3px;
+
+        text-align: center;
+      }
+
+      .weight-name {
+        font-size: 8px;
+
+        color: #666666;
+
+        line-height: 1.2;
+      }
+
+      .weight-value {
+        font-size: 13px;
+
+        font-weight: 700;
+
+        margin-top: 3px;
+      }
+
+      .result-info {
+        font-size: 10px;
+
+        line-height: 1.4;
+      }
+
+      /* =====================================================
+       LOADING
+       ===================================================== */
+
+      .loading {
+        display: none;
+
+        position: fixed;
+
+        inset: 0;
+
+        background: rgba(255, 255, 255, 0.75);
+
+        z-index: 1000;
+
+        align-items: center;
+
+        justify-content: center;
+      }
+
+      .loading-box {
+        background: white;
+
+        border: 1px solid #cccccc;
+
+        padding: 14px 22px;
+
+        font-size: 11px;
+      }
+
+      /* =====================================================
+       MOBILE
+       ===================================================== */
+
+      @media (max-width: 700px) {
+        .header {
+          padding: 8px 10px;
+        }
+
+        .study-title {
+          font-size: 13px;
+        }
+
+        .participant-id {
+          font-size: 9px;
+        }
+
+        .container {
+          padding: 10px 7px 25px;
+        }
+
+        .question-title {
+          font-size: 14px;
+        }
+
+        .instruction {
+          font-size: 10px;
+        }
+
+        .ahp-table {
+          min-width: 850px;
+        }
+
+        .result-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+    <div class="header">
+      <div class="header-inner">
+        <div class="study-title">Recovery AHP</div>
+
+        <div class="participant-id" id="participantIDDisplay">
+          Participant: —
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+    <div class="container">
+      <div class="question-title">
+        With respect to <em>AHP priorities</em>, which criterion is more
+        important, and how much more on a scale 1 to 9?
+      </div>
+
+      <div class="instruction">
+        For each row, first select the criterion you consider more important
+        from <strong>A</strong> or <strong>B</strong>. Then select the strength
+        of that preference from <strong>1 to 9</strong>.
+      </div>
+
+      <div class="scale-description">
+        <strong>AHP Scale:</strong>
+
+        1 = Equal Importance, 3 = Moderate importance, 5 = Strong importance, 7
+        = Very strong importance, 9 = Extreme importance, (2, 4, 6, 8 =
+        intermediate values)
+      </div>
+
+      <!-- ===================================================
+       PROGRESS
+       =================================================== -->
+
+      <div class="progress-container">
+        <div class="progress-top">
+          <span> Pairwise comparisons completed </span>
+
+          <span id="progressText"> 0 / 15 </span>
+        </div>
+
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- ===================================================
+       TABLE
+       =================================================== -->
+
+      <div class="table-wrapper">
+        <table class="ahp-table">
+          <thead>
+            <tr>
+              <th class="number-column">#</th>
+
+              <th class="criterion-a">
+                A - w.r.t <em>AHP priorities</em> - or B?
+              </th>
+
+              <th class="criterion-b">B</th>
+
+              <th class="scale-column">How much more?</th>
+            </tr>
+          </thead>
+
+          <tbody id="ahpBody"></tbody>
+        </table>
+
+        <div class="cr-section">
+          CR =
+
+          <span id="crValue" class="cr-value"> — </span>
+
+          <span id="crMessage"> Please complete all pairwise comparisons </span>
+        </div>
+      </div>
+
+      <!-- ===================================================
+       BUTTONS
+       =================================================== -->
+
+      <div class="button-row">
+        <button onclick="calculateAHP()" id="calculateButton">Calculate</button>
+      </div>
+
+      <!-- ===================================================
+       ERROR
+       =================================================== -->
+
+      <div id="error" class="error"></div>
+
+      <!-- ===================================================
+       SUGGESTION
+       =================================================== -->
+
+      <div id="suggestionBox" class="suggestion-box">
+        <div class="suggestion-title">
+          CR is above the recommended 10% threshold
+        </div>
+
+        <div class="suggestion-explanation">
+          Your A/B decisions are being preserved. The suggestions below only
+          adjust the
+          <strong>1–9 strength values</strong> to improve consistency while
+          staying as close as possible to your original judgments.
+        </div>
+
+        <ul id="suggestionList" class="suggestion-list"></ul>
+
+        <div id="suggestionCR" class="suggestion-cr"></div>
+
+        <div class="suggestion-note">
+          Green highlighted values are suggested alternatives. Your original
+          responses have not been changed.
+        </div>
+
+        <div class="button-row">
+          <button class="apply-button" onclick="applySuggestions()">
+            Apply Suggested Adjustments
+          </button>
+
+          <button onclick="dismissSuggestions()">
+            Keep My Original Judgments
+          </button>
+        </div>
+      </div>
+
+      <!-- ===================================================
+       RESULT
+       =================================================== -->
+
+      <div id="result" class="result">
+        <div class="result-title">AHP Priorities</div>
+
+        <div id="resultGrid" class="result-grid"></div>
+
+        <div id="resultInfo" class="result-info"></div>
+
+        <div class="button-row">
+          <button
+            id="continueButton"
+            class="continue-button"
+            onclick="continueNext()"
+          >
+            Continue to Next AHP →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+     LOADING
+     ===================================================== -->
+
+    <div id="loading" class="loading">
+      <div class="loading-box">Saving your AHP responses...</div>
+    </div>
+
+    <script>
+      /* ========================================================
+   WEB APP URL
+   ======================================================== */
+
+      const WEB_APP_URL = "<?= webAppUrl ?>";
+
+      /* ========================================================
+   PARTICIPANT ID
+   ======================================================== */
+
+      const participantID = "<?= participantID ?>";
+
+      document.getElementById("participantIDDisplay").textContent =
+        participantID ? "Participant: " + participantID : "Participant: —";
+
+      /* ========================================================
+   CRITICAL DEFAULT
+   ========================================================
+
+   B is selected by default.
+
+   Intensity = 1 by default.
+
+   Therefore the initial matrix represents:
+
+   B is selected
+   but B and A have equal importance
+
+   because intensity = 1.
+
+   ======================================================== */
+
+      const criteria = [
+        {
+          id: "days",
+          name: "Recovery within days",
+        },
+
+        {
+          id: "weeks",
+          name: "Recovery within weeks",
+        },
+
+        {
+          id: "months",
+          name: "Recovery within months",
+        },
+
+        {
+          id: "years",
+          name: "Recovery within years",
+        },
+
+        {
+          id: "lifetime",
+          name: "No recovery during individual's lifetime",
+        },
+
+        {
+          id: "generation",
+          name: "Consequences transmitted to next generation",
+        },
+      ];
+
+      /* ========================================================
+   15 PAIRS
+   ======================================================== */
+
+      const pairs = [
+        {
+          key: "days_weeks",
+          a: 0,
+          b: 1,
+        },
+
+        {
+          key: "days_months",
+          a: 0,
+          b: 2,
+        },
+
+        {
+          key: "days_years",
+          a: 0,
+          b: 3,
+        },
+
+        {
+          key: "days_lifetime",
+          a: 0,
+          b: 4,
+        },
+
+        {
+          key: "days_generation",
+          a: 0,
+          b: 5,
+        },
+
+        {
+          key: "weeks_months",
+          a: 1,
+          b: 2,
+        },
+
+        {
+          key: "weeks_years",
+          a: 1,
+          b: 3,
+        },
+
+        {
+          key: "weeks_lifetime",
+          a: 1,
+          b: 4,
+        },
+
+        {
+          key: "weeks_generation",
+          a: 1,
+          b: 5,
+        },
+
+        {
+          key: "months_years",
+          a: 2,
+          b: 3,
+        },
+
+        {
+          key: "months_lifetime",
+          a: 2,
+          b: 4,
+        },
+
+        {
+          key: "months_generation",
+          a: 2,
+          b: 5,
+        },
+
+        {
+          key: "years_lifetime",
+          a: 3,
+          b: 4,
+        },
+
+        {
+          key: "years_generation",
+          a: 3,
+          b: 5,
+        },
+
+        {
+          key: "lifetime_generation",
+          a: 4,
+          b: 5,
+        },
+      ];
+
+      /* ========================================================
+   RESPONSES
+   ========================================================
+
+   IMPORTANT:
+
+   selected: 'B'
+
+   intensity: 1
+
+   Therefore B is selected by default in every row.
+
+   ======================================================== */
+
+      const responses = {};
+
+      pairs.forEach(function (pair) {
+        responses[pair.key] = {
+          selected: "B",
+
+          intensity: 1,
+        };
+      });
+
+      /* ========================================================
+   SUGGESTIONS
+   ======================================================== */
+
+      let suggestedValues = null;
+
+      let suggestionResult = null;
+
+      /* ========================================================
+   SAVING STATE
+   ======================================================== */
+
+      let currentResult = null;
+
+      let saved = false;
+
+      /* ========================================================
+   CREATE TABLE
+   ======================================================== */
+
+      function createTable() {
+        const body = document.getElementById("ahpBody");
+
+        body.innerHTML = "";
+
+        pairs.forEach(function (pair, index) {
+          const row = document.createElement("tr");
+
+          row.id = "row_" + pair.key;
+
+          /* ================================================
+         NUMBER
+         ================================================ */
+
+          const numberCell = document.createElement("td");
+
+          numberCell.className = "number-column";
+
+          numberCell.textContent = index + 1;
+
+          row.appendChild(numberCell);
+
+          /* ================================================
+         A
+         ================================================ */
+
+          const cellA = document.createElement("td");
+
+          cellA.className = "criterion-a";
+
+          cellA.innerHTML =
+            '<label class="criterion-option">' +
+            "<input " +
+            'type="radio" ' +
+            'name="choice_' +
+            pair.key +
+            '" ' +
+            'value="A" ' +
+            "onchange=\"selectSide('" +
+            pair.key +
+            "', 'A')\">" +
+            "<span>" +
+            escapeHTML(criteria[pair.a].name) +
+            "</span>" +
+            "</label>";
+
+          row.appendChild(cellA);
+
+          /* ================================================
+         B
+         ================================================ */
+
+          const cellB = document.createElement("td");
+
+          cellB.className = "criterion-b";
+
+          /*
+           * B IS CHECKED BY DEFAULT.
+           */
+
+          cellB.innerHTML =
+            '<label class="criterion-option">' +
+            "<input " +
+            'type="radio" ' +
+            'name="choice_' +
+            pair.key +
+            '" ' +
+            'value="B" ' +
+            "checked " +
+            "onchange=\"selectSide('" +
+            pair.key +
+            "', 'B')\">" +
+            "<span>" +
+            escapeHTML(criteria[pair.b].name) +
+            "</span>" +
+            "</label>";
+
+          row.appendChild(cellB);
+
+          /* ================================================
+         SCALE
+         ================================================ */
+
+          const cellScale = document.createElement("td");
+
+          cellScale.className = "scale-column";
+
+          const scaleContainer = document.createElement("div");
+
+          scaleContainer.className = "scale-options";
+
+          for (let value = 1; value <= 9; value++) {
+            const label = document.createElement("label");
+
+            label.className = "scale-item";
+
+            label.id = "scale_" + pair.key + "_" + value;
+
+            const radio = document.createElement("input");
+
+            radio.type = "radio";
+
+            radio.name = "scale_" + pair.key;
+
+            radio.value = value;
+
+            /*
+             * 1 IS CHECKED BY DEFAULT.
+             */
+
+            if (value === 1) {
+              radio.checked = true;
+            }
+
+            radio.onchange = function () {
+              selectIntensity(pair.key, value);
+            };
+
+            const number = document.createElement("span");
+
+            number.className = "scale-number";
+
+            number.textContent = value;
+
+            const star = document.createElement("span");
+
+            star.className = "suggested-star";
+
+            star.textContent = "★";
+
+            label.appendChild(radio);
+
+            label.appendChild(number);
+
+            label.appendChild(star);
+
+            scaleContainer.appendChild(label);
+          }
+
+          cellScale.appendChild(scaleContainer);
+
+          row.appendChild(cellScale);
+
+          body.appendChild(row);
+        });
+
+        updateProgress();
+      }
+
+      /* ========================================================
+   SELECT A OR B
+   ======================================================== */
+
+      function selectSide(key, side) {
+        responses[key].selected = side;
+
+        saved = false;
+
+        clearSuggestions();
+
+        hideResult();
+
+        updateProgress();
+      }
+
+      /* ========================================================
+   SELECT 1–9
+   ======================================================== */
+
+      function selectIntensity(key, value) {
+        responses[key].intensity = Number(value);
+
+        saved = false;
+
+        clearSuggestions();
+
+        hideResult();
+
+        updateProgress();
+      }
+
+      /* ========================================================
+   PROGRESS
+   ======================================================== */
+
+      function updateProgress() {
+        let completed = 0;
+
+        pairs.forEach(function (pair) {
+          if (responses[pair.key].selected && responses[pair.key].intensity) {
+            completed++;
+          }
+        });
+
+        document.getElementById("progressText").textContent =
+          completed + " / 15";
+
+        document.getElementById("progressFill").style.width =
+          (completed / 15) * 100 + "%";
+      }
+
+      /* ========================================================
+   BUILD 6 × 6 MATRIX
+   ======================================================== */
+
+      function buildMatrix(data) {
+        const n = criteria.length;
+
+        const matrix = Array.from(
+          {
+            length: n,
+          },
+          function () {
+            return new Array(n).fill(0);
+          },
+        );
+
+        /*
+         * Diagonal = 1
+         */
+
+        for (let i = 0; i < n; i++) {
+          matrix[i][i] = 1;
+        }
+
+        /*
+         * Fill pairwise comparisons.
+         */
+
+        pairs.forEach(function (pair) {
+          const response = data[pair.key];
+
+          const value = Number(response.intensity);
+
+          if (response.selected === "A") {
+            /*
+             * A is value times more important
+             * than B.
+             */
+
+            matrix[pair.a][pair.b] = value;
+
+            matrix[pair.b][pair.a] = 1 / value;
+          } else {
+            /*
+             * B is value times more important
+             * than A.
+             */
+
+            matrix[pair.a][pair.b] = 1 / value;
+
+            matrix[pair.b][pair.a] = value;
+          }
+        });
+
+        return matrix;
+      }
+
+      /* ========================================================
+   PRINCIPAL EIGENVECTOR
+   ======================================================== */
+
+      function principalEigenvector(matrix) {
+        const n = matrix.length;
+
+        let weights = new Array(n).fill(1 / n);
+
+        for (let iteration = 0; iteration < 10000; iteration++) {
+          const next = new Array(n).fill(0);
+
+          for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+              next[i] += matrix[i][j] * weights[j];
+            }
+          }
+
+          const total = next.reduce(function (sum, value) {
+            return sum + value;
+          }, 0);
+
+          for (let i = 0; i < n; i++) {
+            next[i] /= total;
+          }
+
+          let difference = 0;
+
+          for (let i = 0; i < n; i++) {
+            difference += Math.abs(next[i] - weights[i]);
+          }
+
+          weights = next;
+
+          if (difference < 1e-10) {
+            break;
+          }
+        }
+
+        return weights;
+      }
+
+      /* ========================================================
+   AHP EVALUATION
+   ======================================================== */
+
+      function evaluate(data) {
+        const matrix = buildMatrix(data);
+
+        const weights = principalEigenvector(matrix);
+
+        const n = matrix.length;
+
+        let lambdaMax = 0;
+
+        for (let i = 0; i < n; i++) {
+          let rowValue = 0;
+
+          for (let j = 0; j < n; j++) {
+            rowValue += matrix[i][j] * weights[j];
+          }
+
+          lambdaMax += rowValue / weights[i];
+        }
+
+        lambdaMax /= n;
+
+        const CI = (lambdaMax - n) / (n - 1);
+
+        /*
+         * Saaty's RI for n = 6.
+         */
+
+        const RI = 1.24;
+
+        const CR = CI / RI;
+
+        return {
+          matrix: matrix,
+
+          weights: weights,
+
+          lambdaMax: lambdaMax,
+
+          CI: CI,
+
+          RI: RI,
+
+          CR: CR,
+        };
+      }
+
+      /* ========================================================
+   CALCULATE
+   ======================================================== */
+
+      function calculateAHP() {
+        hideError();
+
+        const result = evaluate(responses);
+
+        currentResult = result;
+
+        displayCR(result.CR);
+
+        displayWeights(result.weights);
+
+        /*
+         * CR <= 10%
+         */
+
+        if (result.CR <= 0.1) {
+          clearSuggestions();
+
+          document.getElementById("suggestionBox").style.display = "none";
+
+          document.getElementById("resultInfo").innerHTML =
+            "<strong>Consistency acceptable.</strong> " +
+            "Your consistency ratio is " +
+            (result.CR * 100).toFixed(2) +
+            "%. You can continue to the next section.";
+
+          document.getElementById("result").style.display = "block";
+
+          return;
+        }
+
+        /*
+         * CR > 10%
+         */
+
+        const recommendation = findSuggestion(responses);
+
+        if (recommendation) {
+          suggestedValues = recommendation.values;
+
+          suggestionResult = recommendation.result;
+
+          showSuggestion(recommendation);
+        } else {
+          document.getElementById("suggestionBox").style.display = "block";
+
+          document.getElementById("suggestionList").innerHTML =
+            "<li>" +
+            "No sufficiently consistent combination was found within the closest adjustment range. Please review your judgments manually." +
+            "</li>";
+        }
+      }
+
+      /* ========================================================
+   FIND CLOSEST SUGGESTION
+   ======================================================== */
+
+      function findSuggestion(original) {
+        const originalValues = {};
+
+        pairs.forEach(function (pair) {
+          originalValues[pair.key] = Number(original[pair.key].intensity);
+        });
+
+        /*
+         * Search progressively.
+         *
+         * Distance 1 first.
+         * Then distance 2.
+         * etc.
+         */
+
+        const MAX_DISTANCE = 5;
+
+        for (let distance = 1; distance <= MAX_DISTANCE; distance++) {
+          const found = searchAtDistance(original, originalValues, distance);
+
+          if (found) {
+            return found;
+          }
+        }
+
+        /*
+         * Broader fallback search.
+         */
+
+        return broaderSuggestionSearch(original, originalValues);
+      }
+
+      /* ========================================================
+   SEARCH AT DISTANCE
+   ======================================================== */
+
+      function searchAtDistance(original, originalValues, targetDistance) {
+        let best = null;
+
+        function recurse(index, remaining, candidate) {
+          /*
+           * All 15 rows assigned.
+           */
+
+          if (index === pairs.length) {
+            if (remaining !== 0) {
+              return;
+            }
+
+            const result = evaluateCandidate(original, candidate);
+
+            if (result.CR <= 0.1) {
+              if (!best || result.CR < best.result.CR) {
+                best = {
+                  values: Object.assign({}, candidate),
+
+                  result: result,
+                };
+              }
+            }
+
+            return;
+          }
+
+          const key = pairs[index].key;
+
+          const originalValue = originalValues[key];
+
+          /*
+           * No change.
+           */
+
+          if (remaining >= 0) {
+            candidate[key] = originalValue;
+
+            recurse(index + 1, remaining, candidate);
+          }
+
+          /*
+           * Changes.
+           */
+
+          for (let delta = 1; delta <= remaining; delta++) {
+            /*
+             * Down.
+             */
+
+            const down = originalValue - delta;
+
+            if (down >= 1) {
+              candidate[key] = down;
+
+              recurse(index + 1, remaining - delta, candidate);
+            }
+
+            /*
+             * Up.
+             */
+
+            const up = originalValue + delta;
+
+            if (up <= 9) {
+              candidate[key] = up;
+
+              recurse(index + 1, remaining - delta, candidate);
+            }
+          }
+        }
+
+        recurse(0, targetDistance, {});
+
+        return best;
+      }
+
+      /* ========================================================
+   BROADER FALLBACK SEARCH
+   ======================================================== */
+
+      function broaderSuggestionSearch(original, originalValues) {
+        let current = Object.assign({}, originalValues);
+
+        let currentResult = evaluateCandidate(original, current);
+
+        for (let iteration = 0; iteration < 1000; iteration++) {
+          let best = null;
+
+          for (let p = 0; p < pairs.length; p++) {
+            const key = pairs[p].key;
+
+            const oldValue = current[key];
+
+            for (let value = 1; value <= 9; value++) {
+              if (value === oldValue) {
+                continue;
+              }
+
+              const candidate = Object.assign({}, current);
+
+              candidate[key] = value;
+
+              const result = evaluateCandidate(original, candidate);
+
+              const distance = calculateDistance(originalValues, candidate);
+
+              const score = result.CR + distance * 0.00001;
+
+              if (!best || score < best.score) {
+                best = {
+                  values: candidate,
+
+                  result: result,
+
+                  score: score,
+                };
+              }
+            }
+          }
+
+          if (!best) {
+            break;
+          }
+
+          current = best.values;
+
+          currentResult = best.result;
+
+          if (currentResult.CR <= 0.1) {
+            return {
+              values: current,
+
+              result: currentResult,
+            };
+          }
+        }
+
+        return null;
+      }
+
+      /* ========================================================
+   EVALUATE CANDIDATE
+   ======================================================== */
+
+      function evaluateCandidate(original, values) {
+        const candidate = {};
+
+        pairs.forEach(function (pair) {
+          candidate[pair.key] = {
+            /*
+             * IMPORTANT:
+             *
+             * Keep the participant's A/B choice.
+             */
+
+            selected: original[pair.key].selected,
+
+            intensity: values[pair.key],
+          };
+        });
+
+        return evaluate(candidate);
+      }
+
+      /* ========================================================
+   DISTANCE
+   ======================================================== */
+
+      function calculateDistance(original, candidate) {
+        let distance = 0;
+
+        pairs.forEach(function (pair) {
+          distance += Math.abs(
+            Number(original[pair.key]) - Number(candidate[pair.key]),
+          );
+        });
+
+        return distance;
+      }
+
+      /* ========================================================
+   SHOW SUGGESTION
+   ======================================================== */
+
+      function showSuggestion(recommendation) {
+        clearSuggestionHighlights();
+
+        const list = document.getElementById("suggestionList");
+
+        list.innerHTML = "";
+
+        let numberOfChanges = 0;
+
+        pairs.forEach(function (pair, index) {
+          const originalValue = Number(responses[pair.key].intensity);
+
+          const suggestedValue = Number(recommendation.values[pair.key]);
+
+          if (originalValue !== suggestedValue) {
+            numberOfChanges++;
+
+            /*
+             * Highlight suggested value.
+             */
+
+            const element = document.getElementById(
+              "scale_" + pair.key + "_" + suggestedValue,
+            );
+
+            if (element) {
+              element.classList.add("suggested");
+            }
+
+            /*
+             * Add text.
+             */
+
+            const li = document.createElement("li");
+
+            li.innerHTML =
+              "Row " +
+              "<strong>" +
+              (index + 1) +
+              "</strong>: " +
+              "<strong>" +
+              escapeHTML(criteria[pair.a].name) +
+              "</strong> vs. " +
+              "<strong>" +
+              escapeHTML(criteria[pair.b].name) +
+              "</strong> — change " +
+              "<strong>" +
+              originalValue +
+              "</strong> to " +
+              "<strong>" +
+              suggestedValue +
+              "</strong>";
+
+            list.appendChild(li);
+          }
+        });
+
+        /*
+         * Suggested CR.
+         */
+
+        document.getElementById("suggestionCR").textContent =
+          "Suggested CR: " +
+          (recommendation.result.CR * 100).toFixed(2) +
+          "% " +
+          "(" +
+          numberOfChanges +
+          " judgment" +
+          (numberOfChanges === 1 ? "" : "s") +
+          " changed)";
+
+        /*
+         * Show.
+         */
+
+        document.getElementById("suggestionBox").style.display = "block";
+
+        document.getElementById("suggestionBox").scrollIntoView({
+          behavior: "smooth",
+
+          block: "nearest",
+        });
+      }
+
+      /* ========================================================
+   APPLY SUGGESTIONS
+   ======================================================== */
+
+      function applySuggestions() {
+        if (!suggestedValues) {
+          return;
+        }
+
+        /*
+         * Change ONLY intensity.
+         *
+         * A/B selection remains untouched.
+         */
+
+        pairs.forEach(function (pair) {
+          responses[pair.key].intensity = Number(suggestedValues[pair.key]);
+        });
+
+        /*
+         * Update radio buttons.
+         */
+
+        pairs.forEach(function (pair) {
+          const value = responses[pair.key].intensity;
+
+          const radio = document.querySelector(
+            'input[name="scale_' + pair.key + '"][value="' + value + '"]',
+          );
+
+          if (radio) {
+            radio.checked = true;
+          }
+        });
+
+        clearSuggestions();
+
+        document.getElementById("suggestionBox").style.display = "none";
+
+        calculateAHP();
+      }
+
+      /* ========================================================
+   DISMISS SUGGESTIONS
+   ======================================================== */
+
+      function dismissSuggestions() {
+        clearSuggestions();
+
+        document.getElementById("suggestionBox").style.display = "none";
+      }
+
+      /* ========================================================
+   CLEAR SUGGESTIONS
+   ======================================================== */
+
+      function clearSuggestions() {
+        suggestedValues = null;
+
+        suggestionResult = null;
+
+        clearSuggestionHighlights();
+      }
+
+      /* ========================================================
+   CLEAR HIGHLIGHTS
+   ======================================================== */
+
+      function clearSuggestionHighlights() {
+        document
+          .querySelectorAll(".scale-item.suggested")
+          .forEach(function (element) {
+            element.classList.remove("suggested");
+          });
+      }
+
+      /* ========================================================
+   DISPLAY CR
+   ======================================================== */
+
+      function displayCR(cr) {
+        const value = document.getElementById("crValue");
+
+        const message = document.getElementById("crMessage");
+
+        value.classList.remove("cr-good", "cr-bad");
+
+        value.textContent = (cr * 100).toFixed(2) + "%";
+
+        if (cr <= 0.1) {
+          value.classList.add("cr-good");
+
+          message.textContent = " Consistency acceptable";
+        } else {
+          value.classList.add("cr-bad");
+
+          message.textContent = " Adjust judgments to improve consistency";
+        }
+      }
+
+      /* ========================================================
+   DISPLAY WEIGHTS
+   ======================================================== */
+
+      function displayWeights(weights) {
+        const grid = document.getElementById("resultGrid");
+
+        grid.innerHTML = "";
+
+        criteria.forEach(function (criterion, index) {
+          const box = document.createElement("div");
+
+          box.className = "weight-box";
+
+          box.innerHTML =
+            '<div class="weight-name">' +
+            escapeHTML(criterion.name) +
+            "</div>" +
+            '<div class="weight-value">' +
+            (weights[index] * 100).toFixed(2) +
+            "%" +
+            "</div>";
+
+          grid.appendChild(box);
+        });
+
+        document.getElementById("result").style.display = "block";
+      }
+
+      /* ========================================================
+   HIDE RESULT
+   ======================================================== */
+
+      function hideResult() {
+        document.getElementById("result").style.display = "none";
+      }
+
+      /* ========================================================
+   CONTINUE TO AHP2
+   ======================================================== */
+
+      function continueNext() {
+        if (!currentResult) {
+          return;
+        }
+
+        if (currentResult.CR > 0.1) {
+          showError(
+            "Please achieve an acceptable consistency ratio before continuing.",
+          );
+
+          return;
+        }
+
+        if (!participantID) {
+          showError("Participant ID is missing.");
+
+          return;
+        }
+
+        /*
+         * Prevent duplicate clicks.
+         */
+
+        const button = document.getElementById("continueButton");
+
+        button.disabled = true;
+
+        document.getElementById("loading").style.display = "flex";
+
+        /*
+         * Save Recovery AHP.
+         */
+
+        google.script.run
+
+          .withSuccessHandler(function (result) {
+            saved = true;
+
+            /*
+             * Navigate using the REAL
+             * Apps Script Web App URL.
+             */
+
+            if (!WEB_APP_URL) {
+              document.getElementById("loading").style.display = "none";
+
+              button.disabled = false;
+
+              showError(
+                "Web App URL could not be determined. Please check the deployment.",
+              );
+
+              return;
+            }
+
+            const nextURL =
+              WEB_APP_URL +
+              "?page=ahp2&pid=" +
+              encodeURIComponent(participantID);
+
+            window.top.location.href = nextURL;
+          })
+
+          .withFailureHandler(function (error) {
+            document.getElementById("loading").style.display = "none";
+
+            button.disabled = false;
+
+            showError(
+              error && error.message
+                ? error.message
+                : "Unable to save your AHP response. Please try again.",
+            );
+          })
+
+          .saveRecoveryAHP({
+            participantID: participantID,
+
+            comparisons: responses,
+
+            weights: currentResult.weights,
+
+            matrix: currentResult.matrix,
+
+            lambdaMax: currentResult.lambdaMax,
+
+            CI: currentResult.CI,
+
+            RI: currentResult.RI,
+
+            consistencyRatio: currentResult.CR,
+          });
+      }
+
+      /* ========================================================
+   ERROR
+   ======================================================== */
+
+      function showError(message) {
+        const error = document.getElementById("error");
+
+        error.textContent = message;
+
+        error.style.display = "block";
+
+        error.scrollIntoView({
+          behavior: "smooth",
+
+          block: "nearest",
+        });
+      }
+
+      /* ========================================================
+   HIDE ERROR
+   ======================================================== */
+
+      function hideError() {
+        document.getElementById("error").style.display = "none";
+      }
+
+      /* ========================================================
+   ESCAPE HTML
+   ======================================================== */
+
+      function escapeHTML(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+
+          .replace(/</g, "&lt;")
+
+          .replace(/>/g, "&gt;")
+
+          .replace(/"/g, "&quot;")
+
+          .replace(/'/g, "&#039;");
+      }
+
+      /* ========================================================
+   INITIALISE
+   ======================================================== */
+
+      createTable();
+    </script>
+  </body>
+</html>

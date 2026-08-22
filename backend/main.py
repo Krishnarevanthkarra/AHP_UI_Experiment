@@ -7,23 +7,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from pymongo import MongoClient
+from settings import settings
 
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb://127.0.0.1:27017")
-DB_NAME = os.environ.get("DB_NAME", "ahp_tracker")
+MONGO_USERNAME = settings.MONGO_USERNAME
+MONGO_PASSWORD = settings.MONGO_PASSWORD
+MONGO_CLUSTER = settings.MONGO_CLUSTER
+
+MONGO_URL = f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_CLUSTER}.mongodb.net/?retryWrites=true&w=majority"
+DB_NAME = settings.DB_NAME
 
 app = FastAPI(title="AHP Priority Console API")
-
 # Dev-friendly CORS so the Vite dev server (http://localhost:5173) can call
 # this API directly. Tighten allow_origins for production.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[settings.FRONTEND],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+print(settings.FRONTEND)
 
 client = MongoClient(MONGO_URL)
-db = client[DB_NAME]
+db = client.get_database(DB_NAME)
 matrix_responses = db["matrix_responses"]
 radio_responses = db["radio_responses"]
 matrix_survey = db["matrix_survey"]

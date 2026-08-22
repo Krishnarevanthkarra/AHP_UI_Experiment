@@ -12,7 +12,7 @@ export default function RadioTour({ goBack, goForth }: Props) {
   //     onStart("matrix", frnd);
   // }
   function handleback() {
-    goBack("matrixquestionnaire");
+    goBack("matrix");
   }
   function handleforth() {
     goForth("radio");
@@ -31,12 +31,14 @@ export default function RadioTour({ goBack, goForth }: Props) {
       </div>
 
       <div className="tour-info">
-        <h3>How to Read the Radio Buttons</h3>
-
+        <h3>How to Read the Radio</h3>
+        {/* <h4>Integer Values</h4>
+        <p >For Integer values the weight is calculated from row criteria to column criteria.</p> */}
         <table className="tour-table">
           <thead>
             <tr>
-              <th>Selected Value</th>
+              <th>Selected Cell (Row to Col)</th>
+              <th>Selected Values</th>
               <th>Meaning</th>
             </tr>
           </thead>
@@ -54,11 +56,13 @@ export default function RadioTour({ goBack, goForth }: Props) {
 
             <tr>
               <td>
+                <b>Social-Environment</b>
+              </td>
+              <td>
                 <b>Social, 5</b>
               </td>
               <td>
-                Social criteria is <b>5× more important than the Environment</b>
-                .
+                Social is <b>Strongly preferred</b> than Environment.
               </td>
             </tr>
 
@@ -70,13 +74,29 @@ export default function RadioTour({ goBack, goForth }: Props) {
                 Row criterion is <b>2× more important</b>.
               </td>
             </tr> */}
-
             <tr>
+              <td>
+                <b>Social-Economical</b>
+              </td>
               <td>
                 <b>Social, 1</b>
               </td>
-              <td>Both criteria are equally important.</td>
+              <td>
+                Social is <b>Equally preferred</b> as Economical.
+              </td>
             </tr>
+            <tr>
+              <td>
+                <b>Environment-Economical</b>
+              </td>
+              <td>
+                <b>Economical, 5</b>
+              </td>
+              <td>
+                Economical is <b>Strongly preferred</b> than Environment.
+              </td>
+            </tr>
+            
 
             {/* <tr>
               <td>
@@ -86,16 +106,6 @@ export default function RadioTour({ goBack, goForth }: Props) {
                 Column criterion is <b>2× more important</b>.
               </td>
             </tr> */}
-
-            <tr>
-              <td>
-                <b>Economical, 5</b>
-              </td>
-              <td>
-                Economical criteria is{" "}
-                <b>5× more important than the Environmental</b>.
-              </td>
-            </tr>
 
             {/* <tr>
               <td>
@@ -107,14 +117,13 @@ export default function RadioTour({ goBack, goForth }: Props) {
             </tr> */}
           </tbody>
         </table>
-
-        <p className="fineprint">
-          Example: If you choose <b>2</b> when comparing
-          <b> Cost vs Sustainability</b>, it means
-          <b> Cost is twice as important as Sustainability</b>.
-          <br />
-          If you choose <b>1/9</b>, it means
-          <b> Sustainability is nine times more important than Cost</b>.
+        
+      </div>
+      <div>
+        <h3>Note:</h3>
+        <p style={{ lineHeight: 2 }} className="fineprint">
+          When the cell value is a fraction the priority works otherway (i.e)
+          Column to Row. Read the table example above for more clarification.
         </p>
       </div>
 

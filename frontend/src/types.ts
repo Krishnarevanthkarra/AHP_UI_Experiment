@@ -6,8 +6,8 @@ export type UIType =
   | "setup"
   | "matrixtour"
   | "radiotour"
-  | "matrixquestionnaire"
-  | "radioquestionnaire";
+  // | "matrixquestionnaire"
+  // | "radioquestionnaire";
 
 export interface UserInfo {
   name: string;

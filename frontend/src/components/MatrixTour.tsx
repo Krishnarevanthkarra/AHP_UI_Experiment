@@ -115,18 +115,7 @@ export default function MatrixTour({ goBack, goForth }: Props) {
             </tr> */}
           </tbody>
         </table>
-        <br></br>
-        <h3>
-          <b>Priority Counts are as Follows</b>
-        </h3>
-
-        <p className="fineprint">
-          <p>1 : Equally preferred</p>
-          <p>3 : Moderately preferred</p>
-          <p>5 : Strongly preferred</p>
-          <p>7 : Very strongly preferred</p>
-          <p>9 : Extremely preferred</p>
-        </p>
+        
       </div>
       <div>
         <h3>Note:</h3>

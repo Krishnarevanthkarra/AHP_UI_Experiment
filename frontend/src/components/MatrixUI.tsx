@@ -5,30 +5,30 @@ import { UIType, UserInfo } from "../types";
 import type { Step } from "../App";
 import { compare } from "../types";
 
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
-interface props {
-  text: string;
-  status: "good" | "bad";
-}
+// interface props {
+//   text: string;
+//   status: "good" | "bad";
+// }
 
-function FloatingHint({ text, status }: props) {
-  const [visible, setVisible] = useState(false);
+// function FloatingHint({ text, status }: props) {
+//   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    if (!text) return;
+//   useEffect(() => {
+//     if (!text) return;
 
-    setVisible(true);
+//     setVisible(true);
 
-    const timer = setTimeout(() => setVisible(false), 10000);
+//     const timer = setTimeout(() => setVisible(false), 10000);
 
-    return () => clearTimeout(timer);
-  }, [text]);
+//     return () => clearTimeout(timer);
+//   }, [text]);
 
-  if (!visible) return null;
+//   if (!visible) return null;
 
-  return <div className={`floating-hint ${status}`}>{text}</div>;
-}
+//   return <div className={`floating-hint ${status}`}>{text}</div>;
+// }
 
 interface Props {
   criteria: string[];
@@ -48,10 +48,15 @@ export default function MatrixUI({
   goBack,
   goForth,
 }: Props) {
-  const [hintText, setHintText] = useState("");
+  const [action, setAction] = useState("Please start giving your priorities.");
+  const [allfilled, setAllFilled] = useState(false);
+
   const n = criteria.length;
   const [upper, setUpper] = useState<number[][]>(() =>
     Array.from({ length: n }, () => Array(n).fill(1)),
+  );
+  const [count, setcount] = useState<number[][]>(() =>
+    Array.from({ length: n }, () => Array(n).fill(0)),
   );
   const clickCount = useRef(0);
   const voteCounts = useRef<Record<string, number>>({});
@@ -64,6 +69,7 @@ export default function MatrixUI({
   }
 
   function handleCellChange(i: number, j: number, value: number) {
+    setShowRealCR(false);
     const nextUpper = upper.map((row) => row.slice());
     nextUpper[i][j] = value;
     setUpper(nextUpper);
@@ -83,14 +89,23 @@ export default function MatrixUI({
         value,
         option_vote_count: voteCounts.current[key],
       });
-
+    count[i][j] += 1;
+    var flag: boolean = true;
+    for (let i: number = 0; i < n - 1; i++) {
+      for (let j: number = i + 1; j < n; j++) {
+        if (count[i][j] == 0) {
+          flag = false;
+        }
+      }
+    }
+    setAllFilled(flag);
     const asorthan = value == 1 ? "as" : "than";
     if (value >= 1) {
-      setHintText(
+      setAction(
         `${criteria[i]} is ${compare[value]} ${asorthan} ${criteria[j]}`,
       );
     } else {
-      setHintText(
+      setAction(
         `${criteria[j]} is ${compare[Math.round(1 / value)]} than ${criteria[i]}`,
       );
     }
@@ -110,19 +125,27 @@ export default function MatrixUI({
         value: 1,
         option_vote_count: voteCounts.current.reset,
       });
+    setAction("Matrix reset — start your comparisons from the beginning.");
+    setAllFilled(false);
+    setcount(Array.from({ length: n }, () => Array(n).fill(0)));
   }
+  const [showRealCR, setShowRealCR] = useState(false);
 
-  const crClass = CR < 0.1 ? "good" : "bad";
+  const effectiveCR = showRealCR ? CR : 0;
+
+  const crClass = effectiveCR < 0.1 ? "good" : "bad";
+
   const circumference = 326.7;
-  const pct = Math.min(CR / 0.3, 1);
+  const pct = Math.min(effectiveCR / 0.3, 1);
   const dashOffset = circumference * (1 - pct);
+
   const strokeVar = crClass === "good" ? "var(--good)" : "var(--bad)";
 
   function handleback() {
     goBack("matrixtour");
   }
   function handleforth() {
-    goForth("matrixquestionnaire");
+    goForth("radiotour");
   }
   return (
     <section className="panel">
@@ -132,32 +155,48 @@ export default function MatrixUI({
         (or its reciprocal). Higher values favor the row over the column.
       </p> */}
       <h3 className="fineprint">CR Ratio</h3>
-      <div className="gauge-card">
-        {/* <FloatingHint text={hintText} /> */}
+      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div className="gauge-card">
+          <div className="gauge">
+            <svg viewBox="0 0 120 120">
+              <circle className="gauge-track" cx={60} cy={60} r={52} />
 
-        <div className="gauge">
-          <svg viewBox="0 0 120 120">
-            <circle className="gauge-track" cx={60} cy={60} r={52} />
-            <circle
-              className="gauge-fill"
-              cx={60}
-              cy={60}
-              r={52}
-              style={{ strokeDashoffset: dashOffset, stroke: strokeVar }}
-            />
-          </svg>
-          <div className="gauge-value">
-            <span>{CR.toFixed(4)}</span>
-            <span className="gauge-label">CR</span>
+              <circle
+                className="gauge-fill"
+                cx={60}
+                cy={60}
+                r={52}
+                style={{
+                  strokeDashoffset: dashOffset,
+                  stroke: strokeVar,
+                }}
+              />
+            </svg>
+
+            <div className="gauge-value">
+              <span>{effectiveCR.toFixed(4)}</span>
+              <span className="gauge-label">CR</span>
+            </div>
+          </div>
+
+          <div className={`gauge-status ${crClass === "good" ? "" : crClass}`}>
+            {effectiveCR < 0.1
+              ? "Acceptable (< 0.10)"
+              : "Inconsistent — revise judgments"}
           </div>
         </div>
-        <div className={`gauge-status ${crClass === "good" ? "" : crClass}`}>
-          {CR < 0.1 ? "Acceptable (< 0.10)" : "Inconsistent — revise judgments"}
-        </div>
+
+        <button className="btn-primary" onClick={() => setShowRealCR(true)}>
+          Calculate CR
+        </button>
       </div>
-      <div className="matrix-hint">
+      <div className="action">
+        <h3 className={crClass}>Action Performed: </h3>
+        <p>{action}</p>
+      </div>
+      {/* <div className="matrix-hint">
         <FloatingHint text={hintText} status={crClass} />
-      </div>
+      </div> */}
       <div className="table-wrap">
         <table>
           <thead>
@@ -217,7 +256,18 @@ export default function MatrixUI({
       <p className="fineprint">
         Values below the diagonal are auto-calculated reciprocals.
       </p>
+      <br></br>
+      <h3>
+        <b>Priority Counts are as Follows</b>
+      </h3>
 
+      <p className="fineprint">
+        <p>1 : Equally preferred</p>
+        <p>3 : Moderately preferred</p>
+        <p>5 : Strongly preferred</p>
+        <p>7 : Very strongly preferred</p>
+        <p>9 : Extremely preferred</p>
+      </p>
       <div className="btn-row">
         <button className="btn-ghost" onClick={handleReset}>
           Reset Matrix
@@ -227,7 +277,14 @@ export default function MatrixUI({
         </button>
         <button
           className="btn-primary"
-          disabled={CR >= 0.1}
+          disabled={!(CR < 0.1 && allfilled)}
+          onClick={handleforth}
+        >
+          Next
+        </button>
+        <button
+          className="btn-primary"
+          // disabled={!(CR < 0.1 && allfilled)}
           onClick={handleforth}
         >
           Next

@@ -6,8 +6,8 @@ import RadioUI from "./components/RadioUI";
 import Results from "./components/Results";
 import MatrixTour from "./components/MatrixTour";
 import RadioTour from "./components/RadioTour";
-import MatrixQuestionnaire from "./components/MatrixQuestionnaire";
-import RadioQuestionnaire from "./components/RadioQuestionnaire";
+// import MatrixQuestionnaire from "./components/MatrixQuestionnaire";
+// import RadioQuestionnaire from "./components/RadioQuestionnaire";
 import ThemeToggle from "./components/ThemeToggle";
 import { UIType, UserInfo } from "./types";
 
@@ -18,9 +18,9 @@ export type Step =
   | "radio"
   | "results"
   | "matrixtour"
-  | "radiotour"
-  | "matrixquestionnaire"
-  | "radioquestionnaire";
+  | "radiotour";
+// | "matrixquestionnaire"
+// | "radioquestionnaire";
 
 interface FinalResult {
   weights: number[];
@@ -77,11 +77,11 @@ export default function App() {
     setup: 2,
     matrixtour: 3,
     matrix: 4,
-    matrixquestionnaire: 5,
-    radiotour: 6,
-    radio: 7,
-    radioquestionnaire: 8,
-    results: 9,
+    // matrixquestionnaire: 5,
+    radiotour: 5,
+    radio: 6,
+    // radioquestionnaire: 8,
+    results: 7,
   }[step];
 
   return (
@@ -104,20 +104,20 @@ export default function App() {
           <span className={`step ${stepIndex === 4 ? "current" : ""}`}>
             04 Matirx Compare
           </span>
-          <span className={`step ${stepIndex === 5 ? "current" : ""}`}>
+          {/* <span className={`step ${stepIndex === 5 ? "current" : ""}`}>
             05 Matrix Questionnaire
+          </span> */}
+          <span className={`step ${stepIndex === 5 ? "current" : ""}`}>
+            05 Radio Tour
           </span>
           <span className={`step ${stepIndex === 6 ? "current" : ""}`}>
-            06 Radio Tour
+            06 Radio Compare
           </span>
-          <span className={`step ${stepIndex === 7 ? "current" : ""}`}>
-            07 Radio Compare
-          </span>
-          <span className={`step ${stepIndex === 8 ? "current" : ""}`}>
+          {/* <span className={`step ${stepIndex === 8 ? "current" : ""}`}>
             08 Radio Questionnaire
-          </span>
-          <span className={`step ${stepIndex === 9 ? "current" : ""}`}>
-            09 Finish
+          </span> */}
+          <span className={`step ${stepIndex === 7 ? "current" : ""}`}>
+            07 Finish
           </span>
         </div>
         <ThemeToggle />
@@ -143,13 +143,13 @@ export default function App() {
           goForth={handleforth}
         />
       )}
-      {step === "matrixquestionnaire" && (
+      {/* {step === "matrixquestionnaire" && (
         <MatrixQuestionnaire
           user={user}
           goBack={handleback}
           goForth={handleforth}
         />
-      )}
+      )} */}
 
       {step === "radiotour" && (
         <RadioTour goBack={handleback} goForth={handleforth} />
@@ -165,13 +165,13 @@ export default function App() {
           goForth={handleforth}
         />
       )}
-      {step === "radioquestionnaire" && (
+      {/* {step === "radioquestionnaire" && (
         <RadioQuestionnaire
           user={user}
           goBack={handleback}
           goForth={handleforth}
         />
-      )}
+      )} */}
       {step === "results" && result && (
         <Results name={user?.name} onRestart={handleRestart} />
       )}

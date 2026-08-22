@@ -1,3 +1,41 @@
+.action {
+  width: 100%;
+  min-width: 82px;
+  background: var(--surface-raised);
+  color: var(--text); /* default text color for children */
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.action h3 {
+  font-size: 13px; /* same as table headings */
+  font-family: var(--font-body);
+  margin: 0;
+  font-weight: 600;
+}
+
+.action p {
+  font-size: 13px; /* same as table cells */
+  font-family: var(--font-mono);
+  margin: 0;
+  font-weight: 500; /* stronger weight for visibility */
+  color: var(--text); /* ensure high contrast */
+}
+
+/* Match CR status colors */
+.action h3.good {
+  color: var(--good);
+}
+
+.action h3.bad {
+  color: var(--bad);
+}
+
 .matrix-hint {
   width: 100%;
   height: 46px;
@@ -365,6 +403,7 @@ h1 {
   margin-bottom: 24px;
   width: fit-content;
 }
+
 .gauge {
   position: relative;
   width: 92px;
